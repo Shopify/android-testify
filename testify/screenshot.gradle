@@ -66,8 +66,16 @@ private String getDeviceKey() {
 
 task recordMode(type: DefaultTask, group: "Screenshot", description: "Enable recording of the baseline images for Android screenshot tests") {
     doFirst {
+        startDemoMode()
         isRecordMode = true;
     }
+}
+
+private void startDemoMode() {
+        [getAdbPath(), "-e", "shell", "settings", "put global sysui__allowed 1"].execute()
+        [getAdbPath(), "-e", "shell", "am broadcast", "-a com.android.systemui.demo", "-e command clock", "-e hhmm 0000"].execute()
+        [getAdbPath(), "-e", "shell", "am broadcast", "-a com.android.systemui.demo", "-e command network", "-e mobile show", "-e level 4", "-e datatype 4g"].execute()
+        [getAdbPath(), "-e", "shell", "am broadcast", "-a com.android.systemui.demo", "-e command battery", "-e level 100", "-e plugged false"].execute()
 }
 
 task pullScreenshots(type: DefaultTask, group: "Screenshot", description: "Download the Android screenshot test images from the device") {
@@ -90,6 +98,9 @@ private void hidePasswords() {
 }
 
 task screenshotTest(type: DefaultTask, dependsOn: [":Shopify:installDebug", ":Shopify:installDebugAndroidTest"], group: "Screenshot", description: "Run the Android screenshot tests") {
+    doFirst {
+        startDemoMode()
+    }
     doLast {
 
         hidePasswords();
