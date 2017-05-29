@@ -147,13 +147,13 @@ class ScreenshotUtility {
      * Capture a bitmap from the given Activity and save it to the screenshots directory.
      */
     @Nullable
-    Bitmap createBitmapFromActivity(final Activity activity, String testName) throws Exception {
+    Bitmap createBitmapFromActivity(final Activity activity, String testName, @Nullable final View screenshotView) throws Exception {
         final Bitmap[] currentActivityBitmap = new Bitmap[1];
         final CountDownLatch latch = new CountDownLatch(1);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                currentActivityBitmap[0] = createBitmapFromView(activity, null);
+                currentActivityBitmap[0] = createBitmapFromView(activity, screenshotView);
                 latch.countDown();
             }
         });

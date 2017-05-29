@@ -16,7 +16,7 @@ buildscript {
         maven { url 'http://dl.bintray.com/shopify/shopify-android/' }
     }
     dependencies {
-        classpath 'com.shopify.testify:plugin:0.5.2'
+        classpath 'com.shopify.testify:plugin:0.5.4'
     }
 }
 apply plugin: 'com.shopify.testify'
@@ -177,6 +177,6 @@ Run `adb root` if necessary.
 
 We welcome contributions. Follow the steps in the [CONTRIBUTING](CONTRIBUTING.md) file.
 
-### License 
+### License
 
 The Mobile Buy SDK is provided under an MIT Licence. See the [LICENSE](LICENSE) file.

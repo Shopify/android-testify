@@ -30,8 +30,9 @@ import android.graphics.Bitmap;
 import android.os.Debug;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.action.ViewActions;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.shopify.testify.exception.ScreenshotBaselineNotDefinedException;
@@ -41,7 +42,6 @@ import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
@@ -50,8 +50,9 @@ abstract class BaseScreenshotTest<T> {
 
     static final int NO_ID = -1;
     private static final long INFLATE_TIMEOUT_SECONDS = 5;
-    private ViewModification viewModification;
-    private EspressoActions espressoActions;
+    @Nullable private ViewModification viewModification;
+    @Nullable private EspressoActions espressoActions;
+    @Nullable private ViewProvider screenshotViewProvider;
     @LayoutRes private int layoutId;
     private boolean hideSoftKeyboard = true;
     private Locale defaultLocale = null;
@@ -71,6 +72,12 @@ abstract class BaseScreenshotTest<T> {
     @SuppressWarnings("WeakerAccess")
     public T setViewModifications(ViewModification viewModification) {
         this.viewModification = viewModification;
+        return getThis();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public T setScreenshotViewProvider(ViewProvider viewProvider) {
+        this.screenshotViewProvider = viewProvider;
         return getThis();
     }
 
@@ -139,13 +146,18 @@ abstract class BaseScreenshotTest<T> {
             }
 
             if (hideSoftKeyboard) {
-                Espresso.onView(withId(getRootViewId())).perform(ViewActions.closeSoftKeyboard());
+                Espresso.closeSoftKeyboard();
             }
 
             final String testName = getTestName();
             final ScreenshotUtility screenshotUtility = new ScreenshotUtility();
             screenshotUtility.setLocale(defaultLocale != null ? Locale.getDefault() : null);
-            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, testName);
+
+            View screenshotView = null;
+            if (screenshotViewProvider != null) {
+                screenshotView = screenshotViewProvider.getView(getRootView(activity));
+            }
+            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, testName, screenshotView);
             assertNotNull("Failed to capture bitmap from activity", currentBitmap);
 
             Bitmap baselineBitmap = screenshotUtility.loadBaselineBitmapForComparison(getTestContext(), testName);
@@ -178,5 +190,10 @@ abstract class BaseScreenshotTest<T> {
     public interface EspressoActions {
 
         void performEspressoActions();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public interface ViewProvider {
+        View getView(ViewGroup rootView);
     }
 }
