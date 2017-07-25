@@ -108,7 +108,6 @@ class ScreenshotTestTask extends TestifyDefaultTask {
     def addDependencies(Project project) {
         def tasks = project.tasks
 
-        this.dependsOn "hidePasswords"
         this.dependsOn "disableSoftKeyboard"
         this.dependsOn "showLocale"
         this.dependsOn "showTimeZone"
