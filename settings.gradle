@@ -1,2 +1,2 @@
-include ':testify', ':CloudTestingScreenshotter'
+include ':library', ':CloudTestingScreenshotter'
 include ':plugin'
