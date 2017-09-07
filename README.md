@@ -84,6 +84,7 @@ public class SampleJUnit4Tests {
     public final ScreenshotTestRule<MyActivity> screenshotTestRule = new ScreenshotTestRule<>(MyActivity.class);
 
     @Test
+    @ScreenshotInstrumentation
     @TestifyLayout(layoutId = R.layout.test_sample)
     public void screenshot() throws Exception {
         screenshotTestRule
