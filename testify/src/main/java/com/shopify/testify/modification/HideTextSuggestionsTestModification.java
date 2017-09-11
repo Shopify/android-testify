@@ -23,22 +23,24 @@
  */
 package com.shopify.testify.modification;
 
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 
-public class HideScrollbarsViewModification extends ViewModification {
+public class HideTextSuggestionsTestModification extends TestModification {
 
-    public HideScrollbarsViewModification() {
+    public HideTextSuggestionsTestModification() {
         super(true);
     }
 
     @Override
     protected void performModification(View view) {
-        view.setHorizontalScrollBarEnabled(false);
-        view.setVerticalScrollBarEnabled(false);
+        int inputType = ((EditText) view).getInputType();
+        ((EditText) view).setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     }
 
     @Override
     protected boolean qualifies(View view) {
-        return true;
+        return (view instanceof EditText) && ((EditText) view).getInputType() != 0;
     }
 }

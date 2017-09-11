@@ -37,12 +37,11 @@ import com.shopify.testify.annotation.ScreenshotInstrumentation;
  *
  * @param <T> An Activity subclass to test
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation", "WeakerAccess"})
 @ScreenshotInstrumentation
 public class ScreenshotTestCase<T extends Activity> extends ActivityInstrumentationTestCase2<T> {
 
-    @IdRes
-    private int rootViewId = View.NO_ID;
+    @IdRes private int rootViewId = View.NO_ID;
 
     public ScreenshotTestCase(Class<T> activityClass) {
         super(activityClass);

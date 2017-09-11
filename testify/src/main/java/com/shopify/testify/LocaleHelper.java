@@ -36,7 +36,7 @@ class LocaleHelper {
     private LocaleHelper() {
     }
 
-    public static void setTestLocale(Locale locale) {
+    static void setTestLocale(Locale locale) {
         Locale.setDefault(locale);
         setResourcesLocale(InstrumentationRegistry.getTargetContext().getResources(), locale);
         setResourcesLocale(Resources.getSystem(), locale);

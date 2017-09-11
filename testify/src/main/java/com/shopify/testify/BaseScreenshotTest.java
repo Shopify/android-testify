@@ -43,11 +43,15 @@ import android.view.ViewGroup;
 import com.google.android.libraries.cloudtesting.screenshots.ScreenShotter;
 import com.shopify.testify.exception.ScreenshotBaselineNotDefinedException;
 import com.shopify.testify.exception.ScreenshotIsDifferentException;
-import com.shopify.testify.modification.HideCursorViewModification;
-import com.shopify.testify.modification.HidePasswordViewModification;
-import com.shopify.testify.modification.HideScrollbarsViewModification;
-import com.shopify.testify.modification.HideTextSuggestionsViewModification;
-import com.shopify.testify.modification.SoftwareRenderViewModification;
+import com.shopify.testify.interfaces.EspressoActions;
+import com.shopify.testify.interfaces.ScreenshotTestModifications;
+import com.shopify.testify.interfaces.ViewModification;
+import com.shopify.testify.interfaces.ViewProvider;
+import com.shopify.testify.modification.HideCursorTestModification;
+import com.shopify.testify.modification.HidePasswordTestModification;
+import com.shopify.testify.modification.HideScrollbarsTestModification;
+import com.shopify.testify.modification.HideTextSuggestionsTestModification;
+import com.shopify.testify.modification.SoftwareRenderTestModification;
 
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
@@ -56,30 +60,33 @@ import java.util.concurrent.TimeUnit;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
-@SuppressWarnings("unused")
-abstract class BaseScreenshotTest<T> {
+@SuppressWarnings({"unused", "WeakerAccess"})
+public abstract class BaseScreenshotTest implements ScreenshotTestModifications {
 
     static final int NO_ID = -1;
     private static final long INFLATE_TIMEOUT_SECONDS = 5;
     private static final String LOG_TAG = BaseScreenshotTest.class.getName();
-    @Nullable
-    private ViewModification viewModification;
-    @Nullable
-    private EspressoActions espressoActions;
-    @Nullable
-    private ViewProvider screenshotViewProvider;
-    @LayoutRes
-    private int layoutId;
+    @Nullable private ViewModification viewModification;
+    @Nullable private EspressoActions espressoActions;
+    @Nullable private ViewProvider screenshotViewProvider;
+    @LayoutRes private int layoutId;
     private Locale defaultLocale = null;
     private boolean hideSoftKeyboard = true;
-    private HidePasswordViewModification hidePasswordViewModification = new HidePasswordViewModification();
-    private HideScrollbarsViewModification hideScrollbarsViewModification = new HideScrollbarsViewModification();
-    private HideTextSuggestionsViewModification hideTextSuggestionsViewModification = new HideTextSuggestionsViewModification();
-    private SoftwareRenderViewModification softwareRenderViewModification = new SoftwareRenderViewModification();
-    private HideCursorViewModification hideCursorViewModification = new HideCursorViewModification();
+    private HidePasswordTestModification hidePasswordViewModification = new HidePasswordTestModification();
+    private HideScrollbarsTestModification hideScrollbarsViewModification = new HideScrollbarsTestModification();
+    private HideTextSuggestionsTestModification hideTextSuggestionsViewModification = new HideTextSuggestionsTestModification();
+    private SoftwareRenderTestModification softwareRenderViewModification = new SoftwareRenderTestModification();
+    private HideCursorTestModification hideCursorViewModification = new HideCursorTestModification();
     private BitmapCompare bitmapCompare = null;
 
     BaseScreenshotTest(@LayoutRes int layoutId) {
+        this.layoutId = layoutId;
+    }
+
+    BaseScreenshotTest() {
+    }
+
+    protected void setLayoutId(@LayoutRes int layoutId) {
         this.layoutId = layoutId;
     }
 
@@ -91,52 +98,52 @@ abstract class BaseScreenshotTest<T> {
 
     protected abstract Activity getActivity();
 
-    protected abstract T getThis();
+    protected abstract BaseScreenshotTest getThis();
 
     @SuppressWarnings("WeakerAccess")
-    public T setViewModifications(ViewModification viewModification) {
+    public BaseScreenshotTest setViewModifications(ViewModification viewModification) {
         this.viewModification = viewModification;
         return getThis();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public T setScreenshotViewProvider(ViewProvider viewProvider) {
+    public BaseScreenshotTest setScreenshotViewProvider(@Nullable ViewProvider viewProvider) {
         this.screenshotViewProvider = viewProvider;
         return getThis();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public T setEspressoActions(EspressoActions espressoActions) {
+    public BaseScreenshotTest setEspressoActions(@Nullable EspressoActions espressoActions) {
         this.espressoActions = espressoActions;
         return getThis();
     }
 
-    public T setHideSoftKeyboard(boolean hideSoftKeyboard) {
+    public BaseScreenshotTest setHideSoftKeyboard(boolean hideSoftKeyboard) {
         this.hideSoftKeyboard = hideSoftKeyboard;
         return getThis();
     }
 
-    public T setHideScrollbars(boolean hideScrollbars) {
+    public BaseScreenshotTest setHideScrollbars(boolean hideScrollbars) {
         hideScrollbarsViewModification.setEnabled(hideScrollbars);
         return getThis();
     }
 
-    public T setHidePasswords(boolean hidePasswords) {
+    public BaseScreenshotTest setHidePasswords(boolean hidePasswords) {
         hidePasswordViewModification.setEnabled(hidePasswords);
         return getThis();
     }
 
-    public T setHideCursor(boolean hideCursor) {
+    public BaseScreenshotTest setHideCursor(boolean hideCursor) {
         hideCursorViewModification.setEnabled(hideCursor);
         return getThis();
     }
 
-    public T setHideTextSuggestions(boolean hideTextSuggestions) {
+    public BaseScreenshotTest setHideTextSuggestions(boolean hideTextSuggestions) {
         hideTextSuggestionsViewModification.setEnabled(hideTextSuggestions);
         return getThis();
     }
 
-    public T setUseSoftwareRenderer(boolean useSoftwareRenderer) {
+    public BaseScreenshotTest setUseSoftwareRenderer(boolean useSoftwareRenderer) {
         softwareRenderViewModification.setEnabled(useSoftwareRenderer);
         return getThis();
     }
@@ -148,7 +155,7 @@ abstract class BaseScreenshotTest<T> {
      * @param newLocale the new default locale
      * @return ScreenshotTest instance builder
      */
-    public T setLocale(Locale newLocale) {
+    public BaseScreenshotTest setLocale(Locale newLocale) {
         defaultLocale = Locale.getDefault();
         LocaleHelper.setTestLocale(newLocale);
         return getThis();
@@ -258,32 +265,16 @@ abstract class BaseScreenshotTest<T> {
         }
     }
 
+    private boolean isRecordMode() {
+        final Bundle extras = InstrumentationRegistry.getArguments();
+        final Object isRecordMode = extras.get("isRecordMode");
+        return (isRecordMode != null && isRecordMode.equals("true"));
+    }
+
     private void instrumentationPrintln(String str) {
         Bundle b = new Bundle();
         b.putString(Instrumentation.REPORT_KEY_STREAMRESULT, "\n" + str);
         InstrumentationRegistry.getInstrumentation().sendStatus(0, b);
     }
 
-    private boolean isRecordMode() {
-        Bundle extras = InstrumentationRegistry.getArguments();
-        return (extras.containsKey("isRecordMode") && extras.get("isRecordMode").equals("true"));
-    }
-
-    // TODO: Move to top-level to simplify import
-    @SuppressWarnings("WeakerAccess")
-    public interface ViewModification {
-
-        void modifyView(ViewGroup rootView);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public interface EspressoActions {
-
-        void performEspressoActions();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public interface ViewProvider {
-        View getView(ViewGroup rootView);
-    }
 }

@@ -23,24 +23,23 @@
  */
 package com.shopify.testify.modification;
 
-import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 
-public class HideTextSuggestionsViewModification extends ViewModification {
+public class HidePasswordTestModification extends TestModification {
 
-    public HideTextSuggestionsViewModification() {
+    public HidePasswordTestModification() {
         super(true);
     }
 
     @Override
     protected void performModification(View view) {
-        int inputType = ((EditText) view).getInputType();
-        ((EditText) view).setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        ((EditText) view).setTransformationMethod(StaticPasswordTransformationMethod.getInstance());
     }
 
     @Override
     protected boolean qualifies(View view) {
-        return (view instanceof EditText) && ((EditText) view).getInputType() != 0;
+        return (view instanceof EditText) && (((EditText) view).getTransformationMethod() instanceof PasswordTransformationMethod);
     }
 }

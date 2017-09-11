@@ -23,23 +23,42 @@
  */
 package com.shopify.testify.modification;
 
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
 
-public class HidePasswordViewModification extends ViewModification {
+public abstract class TestModification {
 
-    public HidePasswordViewModification() {
-        super(true);
+    private boolean enabled = false;
+
+    public TestModification(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    @Override
-    protected void performModification(View view) {
-        ((EditText) view).setTransformationMethod(StaticPasswordTransformationMethod.getInstance());
+    public void modify(View view) {
+        if (!enabled) {
+            return;
+        }
+
+        if (qualifies(view)) {
+            performModification(view);
+        }
+
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                modify(((ViewGroup) view).getChildAt(i));
+            }
+        }
     }
 
-    @Override
-    protected boolean qualifies(View view) {
-        return (view instanceof EditText) && (((EditText) view).getTransformationMethod() instanceof PasswordTransformationMethod);
+    public boolean isEnabled() {
+        return enabled;
     }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    protected abstract void performModification(View view);
+
+    protected abstract boolean qualifies(View view);
 }
