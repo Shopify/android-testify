@@ -55,6 +55,14 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
         super(activityClass);
     }
 
+    public ScreenshotTestRule(Class<T> activityClass, boolean initialTouchMode) {
+        super(activityClass, initialTouchMode);
+    }
+
+    public ScreenshotTestRule(Class<T> activityClass, boolean initialTouchMode, boolean launchActivity) {
+        super(activityClass, initialTouchMode, launchActivity);
+    }
+
     @Override
     public Statement apply(Statement base, Description description) {
         throwable = null;
