@@ -61,7 +61,7 @@ testify {
     pullWaitTime 0
 
     // {api_version}-{width_in_pixels}x{height_in_pixels}@{dpi}-{language}
-    outputFileNameFormat "a-wxh@d-l_n_c"
+    outputFileNameFormat "a-wxh@d-l#c_n"
 }
 
 dependencies {

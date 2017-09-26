@@ -226,10 +226,8 @@ abstract class BaseScreenshotTest<T> {
                 screenshotView = screenshotViewProvider.getView(getRootView(activity));
             }
 
-            instrumentationPrintln(DeviceIdentifier.formatDeviceString(getTestContext(), getTestNameComponents(), getFormatString()));
-
-
-            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, testName, screenshotView);
+            final String outputFileName = DeviceIdentifier.formatDeviceString(getTestContext(), getTestNameComponents(), getOutputFileNameFormatString());
+            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, outputFileName, screenshotView);
             assertNotNull("Failed to capture bitmap from activity", currentBitmap);
 
             Bitmap baselineBitmap = screenshotUtility.loadBaselineBitmapForComparison(getTestContext(), testName);
@@ -247,7 +245,7 @@ abstract class BaseScreenshotTest<T> {
             }
 
             if (bitmapCompare.compareBitmaps(baselineBitmap, currentBitmap)) {
-                assertTrue("Could not delete cached bitmap " + testName, screenshotUtility.deleteBitmap(activity, testName));
+                assertTrue("Could not delete cached bitmap " + testName, screenshotUtility.deleteBitmap(activity, outputFileName));
             } else {
                 throw new ScreenshotIsDifferentException(getFullyQualifiedTestPath());
             }
@@ -279,7 +277,7 @@ abstract class BaseScreenshotTest<T> {
         return (extras.containsKey("isRecordMode") && extras.get("isRecordMode").equals("true"));
     }
 
-    private String getFormatString() {
+    private String getOutputFileNameFormatString() {
         Bundle extras = InstrumentationRegistry.getArguments();
         String formatString = "a-wxh@d-l";
         if (extras.containsKey("outputFileNameFormat")) {

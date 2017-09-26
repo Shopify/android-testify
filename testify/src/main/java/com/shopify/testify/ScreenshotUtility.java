@@ -159,7 +159,7 @@ class ScreenshotUtility implements BitmapCompare {
      * Capture a bitmap from the given Activity and save it to the screenshots directory.
      */
     @Nullable
-    Bitmap createBitmapFromActivity(final Activity activity, String testName, @Nullable final View screenshotView) throws Exception {
+    Bitmap createBitmapFromActivity(final Activity activity, String fileName, @Nullable final View screenshotView) throws Exception {
         final Bitmap[] currentActivityBitmap = new Bitmap[1];
         final CountDownLatch latch = new CountDownLatch(1);
         activity.runOnUiThread(new Runnable() {
@@ -181,7 +181,7 @@ class ScreenshotUtility implements BitmapCompare {
             return null;
         }
 
-        String outputPath = getOutputFilePath(activity, testName);
+        String outputPath = getOutputFilePath(activity, fileName);
         saveBitmapToFile(activity, currentActivityBitmap[0], outputPath);
         return BitmapFactory.decodeFile(outputPath, getPreferredBitmapOptions());
     }
@@ -194,8 +194,8 @@ class ScreenshotUtility implements BitmapCompare {
         return !(baselineBitmap == null || currentBitmap == null) && baselineBitmap.sameAs(currentBitmap);
     }
 
-    boolean deleteBitmap(Context context, String testName) {
-        final File file = new File(getOutputFilePath(context, testName));
+    boolean deleteBitmap(Context context, String fileName) {
+        final File file = new File(getOutputFilePath(context, fileName));
         return file.delete();
     }
 

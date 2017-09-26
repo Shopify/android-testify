@@ -26,6 +26,7 @@ package com.shopify.testify;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -68,15 +69,10 @@ public class DeviceIdentifier {
     }
 
     public static String getDescription(@NonNull Context context) {
-        final DisplayMetrics metrics = new DisplayMetrics();
-
-        Pair<Integer, Integer> dimensions = getDeviceDimensions(context);
-
-        String language = Locale.getDefault().getLanguage();
-        return android.os.Build.VERSION.SDK_INT + "-" + dimensions.first + "x" + dimensions.second + "@" + metrics.densityDpi + "dp-" + language;
+        return formatDeviceString(context, null, "a-wxh@d-l");
     }
 
-    public static String formatDeviceString(@NonNull Context context, Pair<String, String> testName, String format) {
+    public static String formatDeviceString(@NonNull Context context, @Nullable Pair<String, String> testName, String format) {
         /*
         a: API level (ex. 21)
         w: Device width (ex.720)
@@ -93,8 +89,8 @@ public class DeviceIdentifier {
         final String h = dimensions.second.toString();
         final String d = context.getResources().getDisplayMetrics().densityDpi + "dp";
         final String l = Locale.getDefault().getLanguage();
-        final String c = testName.first;
-        final String n = testName.second;
+        final String c = (testName == null) ? "" : testName.first;
+        final String n = (testName == null) ? "" : testName.second;
 
         StringBuilder stringBuilder = new StringBuilder("");
         for (int i = 0; i < format.length(); i++) {
