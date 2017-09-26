@@ -29,6 +29,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Pair;
 import android.view.View;
 
 import com.shopify.testify.annotation.BitmapComparisonExactness;
@@ -44,7 +45,8 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
 
     @LayoutRes
     private int layoutId;
-    private String testName;
+    private String testMethodNode;
+    private String testSimpleClassName;
     private String testClass;
     private Throwable throwable;
     private BaseScreenshotTest.EspressoActions espressoActions;
@@ -67,7 +69,8 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
     public Statement apply(Statement base, Description description) {
         throwable = null;
         espressoActions = null;
-        testName = description.getTestClass().getSimpleName() + "_" + description.getMethodName();
+        testSimpleClassName = description.getTestClass().getSimpleName();
+        testMethodNode = description.getMethodName();
         testClass = description.getTestClass().getCanonicalName() + "#" + description.getMethodName();
         final TestifyLayout testifyLayout = description.getAnnotation(TestifyLayout.class);
         layoutId = (testifyLayout != null) ? testifyLayout.layoutId() : View.NO_ID;
@@ -150,8 +153,8 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
         }
 
         @Override
-        protected String getTestName() {
-            return testName;
+        protected Pair<String, String> getTestNameComponents() {
+            return new Pair<>(testSimpleClassName, testMethodNode);
         }
 
         @Override

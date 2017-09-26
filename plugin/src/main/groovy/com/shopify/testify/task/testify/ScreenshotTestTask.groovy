@@ -72,7 +72,7 @@ class ScreenshotTestTask extends TestifyDefaultTask {
         return shardParams
     }
 
-    private static def getRuntimeParams() {
+    private def getRuntimeParams() {
         def runtimeParams = ""
         def useSdCard = System.getenv("TESTIFY_USE_SDCARD")
         if (useSdCard != null && useSdCard.toBoolean()) {
@@ -80,6 +80,14 @@ class ScreenshotTestTask extends TestifyDefaultTask {
         }
         if (RecordModeTask.isRecordMode) {
             runtimeParams += "-e isRecordMode true"
+        }
+        String outputFileNameFormat = project.testify.outputFileNameFormat
+        if (System.getenv("TESTIFY_OUTPUT_FORMAT") != null) {
+            // Environment variable takes priority
+            outputFileNameFormat = System.getenv("TESTIFY_OUTPUT_FORMAT")
+        }
+        if (outputFileNameFormat != null && !outputFileNameFormat.isEmpty()) {
+            runtimeParams += "-e outputFileNameFormat ${outputFileNameFormat}"
         }
         return runtimeParams
     }

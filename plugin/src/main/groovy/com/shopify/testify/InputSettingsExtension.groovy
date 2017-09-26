@@ -35,6 +35,7 @@ class InputSettingsExtension {
     String moduleName;
     String testContextId
     boolean useSdCard = false
+    String outputFileNameFormat
 
     String getTestRunner() {
         if (testRunner == null) {
