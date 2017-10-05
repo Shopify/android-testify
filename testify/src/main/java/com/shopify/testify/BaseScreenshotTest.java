@@ -37,6 +37,7 @@ import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -83,7 +84,7 @@ abstract class BaseScreenshotTest<T> {
         this.layoutId = layoutId;
     }
 
-    protected abstract String getTestName();
+    protected abstract Pair<String, String> getTestNameComponents();
 
     protected abstract String getFullyQualifiedTestPath();
 
@@ -224,7 +225,9 @@ abstract class BaseScreenshotTest<T> {
             if (screenshotViewProvider != null) {
                 screenshotView = screenshotViewProvider.getView(getRootView(activity));
             }
-            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, testName, screenshotView);
+
+            final String outputFileName = DeviceIdentifier.formatDeviceString(getTestContext(), getTestNameComponents(), getOutputFileNameFormatString());
+            Bitmap currentBitmap = screenshotUtility.createBitmapFromActivity(activity, outputFileName, screenshotView);
             assertNotNull("Failed to capture bitmap from activity", currentBitmap);
 
             Bitmap baselineBitmap = screenshotUtility.loadBaselineBitmapForComparison(getTestContext(), testName);
@@ -242,7 +245,7 @@ abstract class BaseScreenshotTest<T> {
             }
 
             if (bitmapCompare.compareBitmaps(baselineBitmap, currentBitmap)) {
-                assertTrue("Could not delete cached bitmap " + testName, screenshotUtility.deleteBitmap(activity, testName));
+                assertTrue("Could not delete cached bitmap " + testName, screenshotUtility.deleteBitmap(activity, outputFileName));
             } else {
                 throw new ScreenshotIsDifferentException(getFullyQualifiedTestPath());
             }
@@ -258,6 +261,11 @@ abstract class BaseScreenshotTest<T> {
         }
     }
 
+    private String getTestName() {
+        final Pair<String, String> testNameComponents = getTestNameComponents();
+        return testNameComponents.first + "_" + testNameComponents.second;
+    }
+
     private void instrumentationPrintln(String str) {
         Bundle b = new Bundle();
         b.putString(Instrumentation.REPORT_KEY_STREAMRESULT, "\n" + str);
@@ -267,6 +275,15 @@ abstract class BaseScreenshotTest<T> {
     private boolean isRecordMode() {
         Bundle extras = InstrumentationRegistry.getArguments();
         return (extras.containsKey("isRecordMode") && extras.get("isRecordMode").equals("true"));
+    }
+
+    private String getOutputFileNameFormatString() {
+        Bundle extras = InstrumentationRegistry.getArguments();
+        String formatString = "a-wxh@d-l";
+        if (extras.containsKey("outputFileNameFormat")) {
+            formatString = extras.getString("outputFileNameFormat");
+        }
+        return formatString;
     }
 
     // TODO: Move to top-level to simplify import

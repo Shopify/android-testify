@@ -26,8 +26,10 @@ package com.shopify.testify;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -39,7 +41,7 @@ public class DeviceIdentifier {
     private DeviceIdentifier() {
     }
 
-    public static String getDescription(@NonNull Context context) {
+    private static Pair<Integer, Integer> getDeviceDimensions(@NonNull Context context) {
         final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics metrics = new DisplayMetrics();
         Display display = windowManager.getDefaultDisplay();
@@ -63,7 +65,64 @@ public class DeviceIdentifier {
             }
         }
 
-        String language = Locale.getDefault().getLanguage();
-        return android.os.Build.VERSION.SDK_INT + "-" + realWidth + "x" + realHeight + "@" + metrics.densityDpi + "dp-" + language;
+        return new Pair<>(realWidth, realHeight);
+    }
+
+    public static String getDescription(@NonNull Context context) {
+        return formatDeviceString(context, null, "a-wxh@d-l");
+    }
+
+    public static String formatDeviceString(@NonNull Context context, @Nullable Pair<String, String> testName, String format) {
+        /*
+        a: API level (ex. 21)
+        w: Device width (ex.720)
+        h: Device height (ex. 1440)
+        d: Device density (ex. 320dp)
+        l: Language (ex. en)
+        c: Test class (ex. OrderDetailTest)
+        n: Test name (ex. testDefault)
+         */
+        final Pair<Integer, Integer> dimensions = getDeviceDimensions(context);
+
+        final String a = Integer.toString(android.os.Build.VERSION.SDK_INT);
+        final String w = dimensions.first.toString();
+        final String h = dimensions.second.toString();
+        final String d = context.getResources().getDisplayMetrics().densityDpi + "dp";
+        final String l = Locale.getDefault().getLanguage();
+        final String c = (testName == null) ? "" : testName.first;
+        final String n = (testName == null) ? "" : testName.second;
+
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = 0; i < format.length(); i++) {
+            char character = format.charAt(i);
+            switch (character) {
+                case 'a':
+                    stringBuilder.append(a);
+                    break;
+                case 'w':
+                    stringBuilder.append(w);
+                    break;
+                case 'h':
+                    stringBuilder.append(h);
+                    break;
+                case 'd':
+                    stringBuilder.append(d);
+                    break;
+                case 'l':
+                    stringBuilder.append(l);
+                    break;
+                case 'c':
+                    stringBuilder.append(c);
+                    break;
+                case 'n':
+                    stringBuilder.append(n);
+                    break;
+                default:
+                    stringBuilder.append(character);
+                    break;
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }

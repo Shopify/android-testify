@@ -29,6 +29,7 @@ import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Pair;
 import android.view.View;
 
 import static junit.framework.Assert.assertNotNull;
@@ -48,8 +49,8 @@ public class ScreenshotTest extends BaseScreenshotTest<ScreenshotTest> {
     }
 
     @Override
-    protected String getTestName() {
-        return testCase.getClass().getSimpleName() + "_" + testCase.getName();
+    protected Pair<String, String> getTestNameComponents() {
+        return new Pair<>(testCase.getClass().getSimpleName(), testCase.getName());
     }
 
     @Override
