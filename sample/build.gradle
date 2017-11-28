@@ -7,7 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.shopify.testify:plugin:0.7.5"
+        classpath "com.shopify.testify:plugin:0.9.2"
     }
 }
 
@@ -52,7 +52,7 @@ android {
 }
 
 testify {
-    moduleName = "app"
+    moduleName = "sample"
     applicationPackageId "${project.android.defaultConfig.applicationId}"
     testContextId "${project.android.defaultConfig.applicationId}"
     testPackageId "${project.android.defaultConfig.applicationId}.test"
