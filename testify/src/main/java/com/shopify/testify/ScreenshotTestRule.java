@@ -33,6 +33,9 @@ import android.view.View;
 
 import com.shopify.testify.annotation.BitmapComparisonExactness;
 import com.shopify.testify.annotation.TestifyLayout;
+import com.shopify.testify.interfaces.EspressoActions;
+import com.shopify.testify.interfaces.ScreenshotTestModifications;
+import com.shopify.testify.interfaces.ViewModification;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -42,14 +45,12 @@ import org.junit.runners.model.Statement;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> implements TestRule {
 
-    @LayoutRes
-    private int layoutId;
     private String testName;
     private String testClass;
     private Throwable throwable;
-    private BaseScreenshotTest.EspressoActions espressoActions;
-    private BaseScreenshotTest.ViewModification viewModification;
     private Float exactness = null;
+
+    private ScreenshotTest screenshotTest = new ScreenshotTest();
 
     public ScreenshotTestRule(Class<T> activityClass) {
         super(activityClass);
@@ -66,36 +67,39 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
     @Override
     public Statement apply(Statement base, Description description) {
         throwable = null;
-        espressoActions = null;
         testName = description.getTestClass().getSimpleName() + "_" + description.getMethodName();
         testClass = description.getTestClass().getCanonicalName() + "#" + description.getMethodName();
+
         final TestifyLayout testifyLayout = description.getAnnotation(TestifyLayout.class);
-        layoutId = (testifyLayout != null) ? testifyLayout.layoutId() : View.NO_ID;
+        setLayoutId((testifyLayout != null) ? testifyLayout.layoutId() : View.NO_ID);
+
         final BitmapComparisonExactness bitmapComparison = description.getAnnotation(BitmapComparisonExactness.class);
         exactness = (bitmapComparison != null) ? bitmapComparison.exactness() : null;
+
         return new ScreenshotStatement(super.apply(new BaseInterceptorStatement(base), description));
     }
 
     public ScreenshotTestRule setLayoutId(@LayoutRes int layoutId) {
-        this.layoutId = layoutId;
+        screenshotTest.setLayoutId(layoutId);
         return this;
     }
 
-    public ScreenshotTestRule setEspressoActions(BaseScreenshotTest.EspressoActions espressoActions) {
-        this.espressoActions = espressoActions;
+    public ScreenshotTestRule setEspressoActions(EspressoActions espressoActions) {
+        screenshotTest.setEspressoActions(espressoActions);
         return this;
     }
 
-    public ScreenshotTestRule setViewModifications(BaseScreenshotTest.ViewModification viewModification) {
-        this.viewModification = viewModification;
+    public ScreenshotTestRule setViewModifications(ViewModification viewModification) {
+        screenshotTest.setViewModifications(viewModification);
         return this;
+    }
+
+    public ScreenshotTestModifications getTestModifications() {
+        return screenshotTest;
     }
 
     private void afterTestStatement() {
-        ScreenshotTest screenshotTest = new ScreenshotTest(layoutId);
         try {
-            screenshotTest.setViewModifications(viewModification);
-            screenshotTest.setEspressoActions(espressoActions);
             if (exactness != null) {
                 screenshotTest.assertSame(exactness);
             } else {
@@ -143,11 +147,7 @@ public class ScreenshotTestRule<T extends Activity> extends ActivityTestRule<T> 
         }
     }
 
-    private class ScreenshotTest extends BaseScreenshotTest<ScreenshotTest> {
-
-        ScreenshotTest(@LayoutRes int layoutId) {
-            super(layoutId);
-        }
+    private class ScreenshotTest extends BaseScreenshotTest {
 
         @Override
         protected String getTestName() {

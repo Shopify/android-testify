@@ -34,12 +34,12 @@ import android.view.WindowManager;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
-public class DeviceIdentifier {
+class DeviceIdentifier {
 
     private DeviceIdentifier() {
     }
 
-    public static String getDescription(@NonNull Context context) {
+    static String getDescription(@NonNull Context context) {
         final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final DisplayMetrics metrics = new DisplayMetrics();
         Display display = windowManager.getDefaultDisplay();

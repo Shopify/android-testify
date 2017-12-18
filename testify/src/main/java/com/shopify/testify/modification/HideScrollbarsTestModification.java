@@ -24,21 +24,21 @@
 package com.shopify.testify.modification;
 
 import android.view.View;
-import android.widget.EditText;
 
-public class HideCursorViewModification extends ViewModification {
+public class HideScrollbarsTestModification extends TestModification {
 
-    public HideCursorViewModification() {
+    public HideScrollbarsTestModification() {
         super(true);
     }
 
     @Override
     protected void performModification(View view) {
-        ((EditText) view).setCursorVisible(false);
+        view.setHorizontalScrollBarEnabled(false);
+        view.setVerticalScrollBarEnabled(false);
     }
 
     @Override
     protected boolean qualifies(View view) {
-        return (view instanceof EditText);
+        return true;
     }
 }

@@ -3,9 +3,9 @@ package com.shopify.testify.modification;
 import android.view.View;
 import android.widget.ImageView;
 
-public class SoftwareRenderViewModification extends ViewModification {
+public class SoftwareRenderTestModification extends TestModification {
 
-    public SoftwareRenderViewModification() {
+    public SoftwareRenderTestModification() {
         super(false);
     }
 

@@ -4,11 +4,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
-import com.shopify.testify.ScreenshotTest;
 import com.shopify.testify.ScreenshotTestRule;
 import com.shopify.testify.annotation.BitmapComparisonExactness;
 import com.shopify.testify.annotation.ScreenshotInstrumentation;
 import com.shopify.testify.annotation.TestifyLayout;
+import com.shopify.testify.interfaces.EspressoActions;
+import com.shopify.testify.interfaces.ViewModification;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class SampleJUnit4Tests {
     @TestifyLayout(layoutId = R.layout.test_sample)
     @ScreenshotInstrumentation
     public void usingEspresso() throws Exception {
-        screenshotTestRule.setEspressoActions(new ScreenshotTest.EspressoActions() {
+        screenshotTestRule.setEspressoActions(new EspressoActions() {
             @Override
             public void performEspressoActions() {
                 onView(withId(R.id.checkBox)).perform(click());
@@ -54,7 +55,7 @@ public class SampleJUnit4Tests {
     @TestifyLayout(layoutId = R.layout.test_sample)
     @ScreenshotInstrumentation
     public void withViewModifications() throws Exception {
-        screenshotTestRule.setViewModifications(new ScreenshotTest.ViewModification() {
+        screenshotTestRule.setViewModifications(new ViewModification() {
             @Override
             public void modifyView(ViewGroup rootView) {
                 ((RadioButton) rootView.findViewById(R.id.radioButton)).setChecked(true);
@@ -72,7 +73,7 @@ public class SampleJUnit4Tests {
     @BitmapComparisonExactness(exactness = 0.95f)
     @ScreenshotInstrumentation
     public void withFuzzyMatching() throws Exception {
-        screenshotTestRule.setViewModifications(new ScreenshotTest.ViewModification() {
+        screenshotTestRule.setViewModifications(new ViewModification() {
             @Override
             public void modifyView(ViewGroup rootView) {
 
@@ -88,5 +89,12 @@ public class SampleJUnit4Tests {
     @TestifyLayout(layoutId = R.layout.content_editable)
     @ScreenshotInstrumentation
     public void noBlinkingCursor() {
+    }
+
+    @Test
+    @TestifyLayout(layoutId = R.layout.content_editable)
+    @ScreenshotInstrumentation
+    public void allowBlinkingCursor() {
+        screenshotTestRule.getTestModifications().setHideCursor(false);
     }
 }

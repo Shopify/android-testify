@@ -24,41 +24,21 @@
 package com.shopify.testify.modification;
 
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
 
-public abstract class ViewModification {
+public class HideCursorTestModification extends TestModification {
 
-    private boolean enabled = false;
-
-    public ViewModification(boolean enabled) {
-        this.enabled = enabled;
+    public HideCursorTestModification() {
+        super(true);
     }
 
-    public void modify(View view) {
-        if (!enabled) {
-            return;
-        }
-
-        if (qualifies(view)) {
-            performModification(view);
-        }
-
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                modify(((ViewGroup) view).getChildAt(i));
-            }
-        }
+    @Override
+    protected void performModification(View view) {
+        ((EditText) view).setCursorVisible(false);
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    @Override
+    protected boolean qualifies(View view) {
+        return (view instanceof EditText);
     }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    protected abstract void performModification(View view);
-
-    protected abstract boolean qualifies(View view);
 }

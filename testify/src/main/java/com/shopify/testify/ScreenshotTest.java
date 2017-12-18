@@ -33,8 +33,8 @@ import android.view.View;
 
 import static junit.framework.Assert.assertNotNull;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class ScreenshotTest extends BaseScreenshotTest<ScreenshotTest> {
+@SuppressWarnings({"unused", "WeakerAccess", "deprecation"})
+public class ScreenshotTest extends BaseScreenshotTest {
 
     private ActivityInstrumentationTestCase2 testCase;
 

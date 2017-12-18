@@ -28,6 +28,8 @@ import android.widget.RadioButton;
 
 import com.shopify.testify.ScreenshotTest;
 import com.shopify.testify.ScreenshotTestCase;
+import com.shopify.testify.interfaces.EspressoActions;
+import com.shopify.testify.interfaces.ViewModification;
 
 import java.util.Locale;
 
@@ -36,8 +38,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class SampleJUnit3Tests extends ScreenshotTestCase<TestHarnessActivity> {
-
-    private Locale defaultLocale;
 
     public SampleJUnit3Tests() {
         super(TestHarnessActivity.class, R.id.component_placeholder);
@@ -59,7 +59,7 @@ public class SampleJUnit3Tests extends ScreenshotTestCase<TestHarnessActivity> {
 
     public void testEspressoActions() throws Exception {
         new ScreenshotTest(this, R.layout.test_sample)
-                .setEspressoActions(new ScreenshotTest.EspressoActions() {
+                .setEspressoActions(new EspressoActions() {
                     @Override
                     public void performEspressoActions() {
                         onView(withId(R.id.checkBox)).perform(click());
@@ -70,7 +70,7 @@ public class SampleJUnit3Tests extends ScreenshotTestCase<TestHarnessActivity> {
 
     public void testViewModifications() throws Exception {
         new ScreenshotTest(this, R.layout.test_sample)
-                .setViewModifications(new ScreenshotTest.ViewModification() {
+                .setViewModifications(new ViewModification() {
                     @Override
                     public void modifyView(ViewGroup rootView) {
                         ((RadioButton) rootView.findViewById(R.id.radioButton)).setChecked(true);
