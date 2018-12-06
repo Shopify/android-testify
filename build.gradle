@@ -1,0 +1,382 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+    }
+
+    ext {
+        versions = [
+            'androidx_espresso'    : '3.1.0',
+            'androidx_runner'      : '1.1.0',
+            'androidx_test'        : '1.0.0',
+            'androidGradlePlugin'  : '3.3.0-rc01', // https://developer.android.com/studio/releases/gradle-plugin.html
+            'androidKtx'           : '0.3',        // https://github.com/android/android-ktx/releases
+            'androidSvg'           : '1.2.1',      // http://search.maven.org/#artifactdetails%7Ccom.caverock%7Candroidsvg%7C1.2.1%7Cjar
+            'apacheCodec'          : '1.10',       // https://commons.apache.org/proper/commons-codec/dependency-info.html
+            'apacheIo'             : '2.4',        // https://commons.apache.org/proper/commons-io/dependency-info.html
+            'apacheLang'           : '3.5',        // https://commons.apache.org/proper/commons-lang/dependency-info.html
+            'async'                : '2.2.1',      // https://github.com/koush/AndroidAsync
+            'betwixt'              : '0.0.2',      // https://github.com/savvasdalkitsis/betwixt
+            'branch'               : '2.19.3',     // https://github.com/BranchMetrics/android-branch-deep-linking/blob/master/ChangeLog.md
+            'bugsnag'              : '4.4.0',      // https://docs.bugsnag.com/platforms/android/sdk/
+            'burst'                : '1.2.0',      // https://github.com/square/burst
+            'butterknife'          : '9.0.0-rc2',      // https://jakewharton.github.io/butterknife/
+            'card'                 : '5.5.1',      // https://github.com/card-io/card.io-Android-SDK/releases
+            'constraintLayout'     : '1.1.1',      // https://androidstudio.googleblog.com/ (They only seem to announce updates for it here)
+            'debugDrawer'          : '0.7.0',
+            'dexmakerLinkedIn'     : '2.19.1',     // https://github.com/linkedin/dexmaker/releases
+            'disklrucache'         : '2.0.2',      // https://github.com/JakeWharton/DiskLruCache
+            'espresso'             : '2.2.2',      // https://google.github.io/android-testing-support-library/downloads/index.html
+            'espresso3'            : '3.0.1',      // https://google.github.io/android-testing-support-library/downloads/index.html
+            'espressoWeb'          : '2.2.2',      // https://google.github.io/android-testing-support-library/downloads/index.html
+            'eventbus'             : '3.0.0',      // https://github.com/greenrobot/EventBus
+            'evernoteJob'          : '1.2.1',      // https://github.com/evernote/android-job
+            'evernoteState'        : '1.1.5',      // https://github.com/evernote/android-state/blob/master/CHANGELOG.md
+            'flexbox'              : '0.3.0',      // https://github.com/google/flexbox-layout/releases
+            'flowlayout'           : '1.10@aar',   // https://github.com/ApmeM/android-flowlayout/releases
+            'glide'                : '4.3.1',      // https://github.com/bumptech/glide
+            'googlePlay'           : '11.8.0',     // https://developers.google.com/android/guides/releases
+            'gson'                 : '2.8.5',      // https://github.com/google/gson
+            'guava'                : '23.6-android',// https://github.com/google/guava/releases (Not upgrading to 21 on purpose. Seems to cause Java compiler problems)
+            'hamcrest'             : '1.3',        // https://mvnrepository.com/artifact/org.hamcrest/hamcrest-library
+            'hockeyapp'            : '5.1.0',      // https://github.com/bitstadium/HockeySDK-Android/releases
+            'intercom'             : '4.1.0',      // https://github.com/intercom/intercom-android/releases
+            'javaxInject'           : '1',         // http://javax-inject.github.io/javax-inject/
+            'javaxAnnotation'      :'10.0-b28',
+            'javaxValidation'      : '1.1.0.Final',
+            'jetpack_compiler'     : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_extensions'   : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_livedata'     : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_navigation'   : '1.0.0-alpha07', // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_paging'       : '1.0.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_runtime'      : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_streams'      : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_test'         : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jetpack_viewmodel'    : '1.1.1',      // https://developer.android.com/jetpack/docs/release-notes
+            'jobdispatcher'        : '0.8.2',      // https://github.com/firebase/firebase-jobdispatcher-android/releases
+            'jodaTime'             : '2.9.9',      // https://github.com/dlew/joda-time-android/releases
+            'jsonassert'           : '1.5.0',      // https://github.com/skyscreamer/JSONassert/releases
+            'junit'                : '4.12',       // https://github.com/junit-team/junit4/releases
+            'keylineslib'          : '0.2.0',      // https://github.com/shopify/android-keylines-lib
+            'kotlin'               : '1.3.10',     // https://kotlinlang.org/
+            'kotlinxCoroutines'    : '0.30.2-eap13',     // https://github.com/Kotlin/kotlinx.coroutines
+            'ktlint'               : '0.29.0',     // https://github.com/shyiko/ktlint
+            'ktlintHtml'           : '0.2.0',      // https://github.com/mcassiano/ktlint-html-reporter
+            'leakcanary'           : '1.5.4',      // https://github.com/square/leakcanary
+            'libphonenumber'       : '8.8.4',      // https://github.com/googlei18n/libphonenumber/blob/master/release_notes.txt
+            'libsodium'            : '1.0.7',
+            'lint'                 : '26.3.0-alpha03',
+            'livedataKtx'          : '0.2.0',      // https://github.com/shopify/livedata-ktx
+            'lottie'               : '2.5.6',      // https://github.com/airbnb/lottie-android/releases
+            'materialNinePatch'    : '0.6.5',      // https://github.com/h6ah4i/android-materialshadowninepatch/releases
+            'maven'                : '2.0',        // https://github.com/dcendents/android-maven-gradle-plugin/releases
+            'mixpanel'             : '5.2.1',      // https://github.com/mixpanel/mixpanel-android
+            'mockito'              : '1.10.19',    // https://github.com/mockito/mockito/releases
+            'mockito2'             : '2.23.0',     // https://github.com/mockito/mockito/releases
+            'mockito2android'      : '2.23.0',     // https://github.com/mockito/mockito/releases
+            'mockitokotlin'        : '2.0.0',      // https://github.com/nhaarman/mockito-kotlin
+            'mpchart'              : 'v2.2.5',     // https://github.com/PhilJay/MPAndroidChart/releases - updating to 3.0 is a major undertaking, there isn't much help from the owners on doing it
+            'multidex'             : '1.0.2',      // https://developer.android.com/topic/libraries/support-library/revisions.html
+            'okhttp3'              : '3.11.0',     // https://github.com/square/okhttp/blob/master/CHANGELOG.md
+            'picasso'              : '2.5.2',      // https://github.com/square/picasso/releases
+            'picassoDownloader'    : '1.1.0',      // https://github.com/JakeWharton/picasso2-okhttp3-downloader/blob/master/CHANGELOG.md
+            'promises'             : '0.0.5',      // https://github.com/Shopify/promise-kotlin/releases
+            'retrofit2'            : '2.3.0',      // https://github.com/square/retrofit/blob/master/CHANGELOG.md
+            'robolectric'          : '4.0.2',      // https://github.com/robolectric/robolectric/releases/
+            'rocky'                : '0.1.1',
+            'rxAndroid2Version'    : '2.0.1',      // https://github.com/ReactiveX/RxAndroid/releases
+            'rxBindings2Version'   : '2.0.0',      // https://github.com/JakeWharton/RxBinding
+            'rxJava2Version'       : '2.1.5',      // https://github.com/ReactiveX/RxJava/blob/2.x/CHANGES.md
+            'rxRelay2Version'      : '2.0.0',      // https://github.com/JakeWharton/RxRelay/blob/master/CHANGELOG.md
+            'stetho'               : '1.5.0',      // http://facebook.github.io/stetho/
+            'supportLibrary'       : '27.1.1',     // https://developer.android.com/topic/libraries/support-library/revisions.html
+            'supportTest'          : '0.5',        // https://developer.android.com/topic/libraries/testing-support-library/release-notes.html
+            'supportTest1'         : '1.0.1',      // https://developer.android.com/topic/libraries/testing-support-library/release-notes.html
+            'threeten'             : '1.0.5',      // https://github.com/JakeWharton/ThreeTenABP/blob/master/CHANGELOG.md
+            'timber'               : '4.7.0',      // https://github.com/JakeWharton/timber
+            'toothpick'            : '1.1.3',      // https://github.com/stephanenicolas/toothpick
+            'transitionseverywhere': '1.7.6',      // https://github.com/andkulikov/Transitions-Everywhere/releases
+            'truth'                : '0.36',       // https://github.com/google/truth/releases
+            'uiautomator'          : '2.1.3',      // https://google.github.io/android-testing-support-library/downloads/index.html
+            'zxing'                : '3.3.1',      // https://github.com/zxing/zxing/releases
+            'zxingEmbedded'        : '3.5.0@aar'   // https://github.com/journeyapps/zxing-android-embedded/blob/master/CHANGES.md
+            // currently used by pos
+            // currently used by shopify
+        ]
+        coreVersions = [
+            'shopify'   : [
+                'compileSdk'         : 28,
+                'minSdk'             : 21,
+                'targetSdk'          : 28,
+                'supportedLanguages' : ["en", "ja", "it", "es", "fr", "de", "pt-rBR"]
+            ],
+            'pos'       : [
+                'compileSdk'        : 28,
+                'minSdk'            : 21,
+                'targetSdk'         : 27,
+                'supportedLanguages': ["en", "es"],
+                'internalSupportedLanguages' : ["en", "ja", "it", "es", "fr", "de", "pt-rBR"],
+                'cv'        : [
+                    'compileSdk': 28,
+                    'minSdk'    : 21,
+                    'targetSdk' : 27
+                ]
+            ],
+            'devices'       : [
+                    'compileSdk'        : 28,
+                    'minSdk'            : 21,
+                    'targetSdk'         : 28,
+            ],
+        ]
+        classpaths = [
+            'butterknife': "com.jakewharton:butterknife-gradle-plugin:${versions.butterknife}",
+            'maven'      : "com.github.dcendents:android-maven-gradle-plugin:${versions.maven}",
+            'testify'    : "${project.rootDir.path}/Testing/Testify/Plugin/jar/Testify-Plugin-local.jar",
+            'rocky'      : "${project.rootDir.path}/Rocky/Plugin/lib/rocky-plugin-${versions.rocky}.jar"
+        ]
+        depends = [
+            'classpath'            : [
+            ],
+            'androidx'              : [
+                'test' : [
+                    'core'          : "androidx.test:core:${versions.androidx_test}",
+                    'espresso'      : "androidx.test.espresso:espresso-core:${versions.androidx_espresso}",
+                    'junit'         : "androidx.test.ext:junit:${versions.androidx_test}",
+                    'orchestrator'  : "androidx.test:orchestrator:${versions.androidx_test}",
+                    'rules'         : "androidx.test:rules:${versions.androidx_runner}",
+                    'runner'        : "androidx.test:runner:${versions.androidx_runner}",
+                    'truth'         : "androidx.test.ext:truth:${versions.androidx_test}",
+                ],
+            ],
+            'androidSvg'           : "com.caverock:androidsvg:${versions.androidSvg}",
+            'apache'               : [
+                'commons': [
+                    'codec': "commons-codec:commons-codec:${versions.apacheCodec}",
+                    'io'   : "commons-io:commons-io:${versions.apacheIo}",
+                    'lang' : "org.apache.commons:commons-lang3:${versions.apacheLang}",
+                ],
+            ],
+            'archComponents'       : [
+                'compiler'  : "android.arch.lifecycle:compiler:${versions.jetpack_compiler}",
+                'extensions': "android.arch.lifecycle:extensions:${versions.jetpack_extensions}",
+                'paging'    : "android.arch.paging:runtime:${versions.jetpack_paging}",
+                'runtime'   : "android.arch.lifecycle:runtime:${versions.jetpack_runtime}",
+                'streams'   : "android.arch.lifecycle:reactivestreams:${versions.jetpack_streams}",
+                'test'      : "android.arch.core:core-testing:${versions.jetpack_test}",
+                'viewModel' : "android.arch.lifecycle:viewmodel:${versions.jetpack_viewmodel}",
+                'navigation' : [
+                        'ui'      : "android.arch.navigation:navigation-ui-ktx:${versions.jetpack_navigation}",
+                        'fragment': "android.arch.navigation:navigation-fragment-ktx:${versions.jetpack_navigation}",
+                        'testing': "android.arch.navigation:navigation-testing-ktx:${versions.jetpack_navigation}",
+                ],
+            ],
+            'async'                : "com.koushikdutta.async:androidasync:${versions.async}",
+            'betwixt'              : "com.savvasdalkitsis:betwixt-rebound:${versions.betwixt}",
+            'branch'               : "io.branch.sdk.android:library:${versions.branch}",
+            'burst'                : [
+                    'core': "com.squareup.burst:burst:${versions.burst}",
+                    'junit4': "com.squareup.burst:burst-junit4:${versions.burst}"
+            ],
+            'butterknife'          : [
+                'butterknife': "com.jakewharton:butterknife:${versions.butterknife}",
+                'compiler'   : "com.jakewharton:butterknife-compiler:${versions.butterknife}",
+            ],
+            'bugsnag'              : [
+                'bugsnag': "com.bugsnag:bugsnag-android:${versions.bugsnag}"
+            ],
+            'card'                 : "io.card:android-sdk:${versions.card}",
+            'constraintLayout'     : [
+                'constraintLayout': "com.android.support.constraint:constraint-layout:${versions.constraintLayout}"
+            ],
+            'databinding'          : "androidx.databinding:databinding-compiler:${versions.androidGradlePlugin}}",
+            'debugDrawer'          : [
+                'actions'    : "io.palaima.debugdrawer:debugdrawer-actions:${versions.debugDrawer}",
+                'commons'    : "io.palaima.debugdrawer:debugdrawer-commons:${versions.debugDrawer}",
+                'debugDrawer': "io.palaima.debugdrawer:debugdrawer:${versions.debugDrawer}",
+                'no_op'      : "io.palaima.debugdrawer:debugdrawer-no-op:${versions.debugDrawer}",
+            ],
+            'dexmaker'             : [
+                'linkedin': [
+                    'dexmaker': "com.linkedin.dexmaker:dexmaker:${versions.dexmakerLinkedIn}",
+                    'mockito' : "com.linkedin.dexmaker:dexmaker-mockito:${versions.dexmakerLinkedIn}",
+                ],
+            ],
+            'disklrucache'         : "com.jakewharton:disklrucache:${versions.disklrucache}",
+            'eventbus'             : "org.greenrobot:eventbus:${versions.eventbus}",
+            'evernote'             : [
+                'android_job'    : "com.evernote:android-job:${versions.evernoteJob}",
+                'state'          : "com.evernote:android-state:${versions.evernoteState}",
+                'state_processor': "com.evernote:android-state-processor:${versions.evernoteState}",
+            ],
+            'facebook'             : [
+                'stetho': "com.facebook.stetho:stetho:${versions.stetho}",
+            ],
+            'firebase'             : [
+                'jobdispatcher': "com.firebase:firebase-jobdispatcher:${versions.jobdispatcher}",
+                'messaging'    : "com.google.firebase:firebase-messaging:${versions.googlePlay}",
+            ],
+            'flowlayout'           : "org.apmem.tools:layouts:${versions.flowlayout}",
+            'glide'                : [
+                'compiler': "com.github.bumptech.glide:compiler:${versions.glide}",
+                'glide'   : "com.github.bumptech.glide:glide:${versions.glide}"
+            ],
+            'google'               : [
+                'flexbox': "com.google.android:flexbox:${versions.flexbox}",
+                'gson'   : "com.google.code.gson:gson:${versions.gson}",
+                'zxing'  : "com.google.zxing:core:${versions.zxing}",
+            ],
+            'guava'                : "com.google.guava:guava:${versions.guava}",
+            'hamcrest'             : "org.hamcrest:hamcrest-library:${versions.hamcrest}",
+            'hockeyapp'            : "net.hockeyapp.android:HockeySDK:${versions.hockeyapp}",
+            'intercom'             : "io.intercom.android:intercom-sdk-base:${versions.intercom}",
+            'javax'                : [
+                'inject'    : "javax.inject:javax.inject:${versions.javaxInject}",
+                'validation': "javax.validation:validation-api:${versions.javaxValidation}",
+                'annotation': "org.glassfish:javax.annotation:${versions.javaxAnnotation}",
+            ],
+            'joda'                 : [
+                'android': "net.danlew:android.joda:${versions.jodaTime}",
+                'jvm'    : "joda-time:joda-time:${versions.jodaTime}"
+            ],
+            'jsonassert'           : "org.skyscreamer:jsonassert:${versions.jsonassert}",
+            'junit'                : "junit:junit:${versions.junit}",
+            'keylineslib'          : "com.shopify.keylines.lib:keylines-lib:${versions.keylineslib}",
+            'kotlin'               : [
+                'android_ktx' : "androidx.core:core-ktx:${versions.androidKtx}",
+                'coroutines'  : [
+                        'core'    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.kotlinxCoroutines}",
+                        'android' : "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.kotlinxCoroutines}",
+                ],
+                'gradleplugin': "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+                'lint'        : "com.github.shyiko:ktlint:${versions.ktlint}",
+                'lintHtml'    : "me.cassiano:ktlint-html-reporter:${versions.ktlintHtml}",
+                'reflect'     : "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}",
+                /* Please do not use stdlib8 until we target API 24. Using stdlib8 kotlin compiler will produce java 8 bytecode when compiling kotlin files.
+                This might lead to unexpected errors since Java 8 is NOT fully supported on android before API 24*/
+                'stdlib7'     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}",
+                'test'        : "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}"
+            ],
+            'leakcanary'           : "com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}",
+            'libphonenumber'       : "com.googlecode.libphonenumber:libphonenumber:${versions.libphonenumber}",
+            'libsodium'            : "com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:${versions.libsodium}",
+            'lint'                 : [
+                'api'   : "com.android.tools.lint:lint-api:${versions.lint}",
+                'checks': "com.android.tools.lint:lint-checks:${versions.lint}",
+                'lint'  : "com.android.tools.lint:lint:${versions.lint}",
+                'tests' : "com.android.tools.lint:lint-tests:${versions.lint}",
+                'tools' : "com.android.tools:testutils:${versions.lint}"
+            ],
+            'lottie'               : "com.airbnb.android:lottie:${versions.lottie}",
+            'livedataKtx'          : "com.shopify:livedata-ktx:${versions.livedataKtx}",
+            'materialNinePatch'    : "com.h6ah4i.android.materialshadowninepatch:materialshadowninepatch:${versions.materialNinePatch}",
+            'mpchart'              : "com.github.PhilJay:MPAndroidChart:${versions.mpchart}",
+            'mixpanel'             : "com.mixpanel.android:mixpanel-android:${versions.mixpanel}",
+            'mockito'              : [
+                'kotlin'   : "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitokotlin}",
+                'v2'       : "org.mockito:mockito-core:${versions.mockito2}",
+                'v2android': "org.mockito:mockito-android:${versions.mockito2android}",
+                'v2inline' : "org.mockito:mockito-inline:${versions.mockito2}"
+            ],
+            'okhttp3'              : [
+                'logging_interceptor': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp3}",
+                'mockwebserver'      : "com.squareup.okhttp3:mockwebserver:${versions.okhttp3}",
+                'okhttp'             : "com.squareup.okhttp3:okhttp:${versions.okhttp3}",
+                'urlconnection'      : "com.squareup.okhttp3:okhttp-urlconnection:${versions.okhttp3}",
+            ],
+            'picasso'              : [
+                'downloader': "com.jakewharton.picasso:picasso2-okhttp3-downloader:${versions.picassoDownloader}",
+                'picasso'   : "com.squareup.picasso:picasso:${versions.picasso}",
+            ],
+            'play'                 : [
+                'ads'      : "com.google.android.gms:play-services-ads:${versions.googlePlay}",
+                'analytics': "com.google.android.gms:play-services-analytics:${versions.googlePlay}",
+                'auth'     : "com.google.android.gms:play-services-auth:${versions.googlePlay}",
+                'base'     : "com.google.android.gms:play-services-base:${versions.googlePlay}",
+                'places'   : "com.google.android.gms:play-services-places:${versions.googlePlay}",
+            ],
+            'robolectric'          : "org.robolectric:robolectric:${versions.robolectric}",
+            'retrofit2'            : [
+                'converter_gson': "com.squareup.retrofit2:converter-gson:${versions.retrofit2}",
+                'mock'          : "com.squareup.retrofit2:retrofit-mock:${versions.retrofit2}",
+                'retrofit'      : "com.squareup.retrofit2:retrofit:${versions.retrofit2}",
+                'rx'            : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit2}",
+            ],
+            'rx'                   : [
+                'android2' : "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid2Version}",
+                'bindings2': "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${versions.rxBindings2Version}",
+                'java2'    : "io.reactivex.rxjava2:rxjava:${versions.rxJava2Version}",
+                'relay2'   : "com.jakewharton.rxrelay2:rxrelay:${versions.rxRelay2Version}",
+
+            ],
+            'shopify'              : [
+                'graphql_support': "com.shopify.graphql.support:support:${versions.graphQlSupport}",
+                'promises'       : "com.shopify.promises:promises:${versions.promises}"
+            ],
+            'support'              : [
+                'annotations' : "com.android.support:support-annotations:${versions.supportLibrary}",
+                'appcompat_v7': "com.android.support:appcompat-v7:${versions.supportLibrary}",
+                'cardview'    : "com.android.support:cardview-v7:${versions.supportLibrary}",
+                'constraint'  : "com.android.support.constraint:constraint-layout:${versions.constraintLayout}",
+                'customtabs'  : "com.android.support:customtabs:${versions.supportLibrary}",
+                'design'      : "com.android.support:design:${versions.supportLibrary}",
+                'dynamicanim' : "com.android.support:support-dynamic-animation:${versions.supportLibrary}",
+                'gridlayout'  : "com.android.support:gridlayout-v7:${versions.supportLibrary}",
+                'multidex'    : "com.android.support:multidex:${versions.multidex}",
+                'percent'     : "com.android.support:percent:${versions.supportLibrary}",
+                'recyclerview': "com.android.support:recyclerview-v7:${versions.supportLibrary}",
+                'support_v13' : "com.android.support:support-v13:${versions.supportLibrary}",
+                'support_v4'  : "com.android.support:support-v4:${versions.supportLibrary}",
+                'test'        : [
+                    'espresso'   : [
+                        'contrib3'       : "com.android.support.test.espresso:espresso-contrib:${versions.espresso3}",
+                        'core'           : "com.android.support.test.espresso:espresso-core:${versions.espresso}",
+                        'core3'          : "com.android.support.test.espresso:espresso-core:${versions.espresso3}",
+                        'idling_resource': "com.android.support.test.espresso:espresso-idling-resource:${versions.espresso3}",
+                        'intents3'       : "com.android.support.test.espresso:espresso-intents:${versions.espresso3}",
+                        'web'            : "com.android.support.test.espresso:espresso-web:${versions.espressoWeb}",
+                        'web3'           : "com.android.support.test.espresso:espresso-web:${versions.espresso3}",
+                    ],
+                    'rules'      : "com.android.support.test:rules:${versions.supportTest}",
+                    'rules1'     : "com.android.support.test:rules:${versions.supportTest1}",
+                    'runner'     : "com.android.support.test:runner:${versions.supportTest}",
+                    'runner1'    : "com.android.support.test:runner:${versions.supportTest1}",
+                    'truth'      : "com.google.truth:truth:${versions.truth}",
+                    'uiautomator': "com.android.support.test.uiautomator:uiautomator-v18:${versions.uiautomator}"
+                ],
+            ],
+            'timber'               : "com.jakewharton.timber:timber:${versions.timber}",
+            'toothpick'            : [
+                'compiler': "com.github.stephanenicolas.toothpick:toothpick-compiler:${versions.toothpick}",
+                'core'    : "com.github.stephanenicolas.toothpick:toothpick:${versions.toothpick}",
+                'runtime' : "com.github.stephanenicolas.toothpick:toothpick-runtime:${versions.toothpick}",
+                'smoothie': "com.github.stephanenicolas.toothpick:smoothie:${versions.toothpick}",
+                'test'    : "com.github.stephanenicolas.toothpick:toothpick-testing:${versions.toothpick}",
+            ],
+            'threeten'             : "com.jakewharton.threetenabp:threetenabp:${versions.threeten}",
+            'transitionseverywhere': "com.andkulikov:transitionseverywhere:${versions.transitionseverywhere}",
+            'zxing_embedded'       : "com.journeyapps:zxing-android-embedded:${versions.zxingEmbedded}",
+        ]
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${versions.androidGradlePlugin}" // https://developer.android.com/studio/releases/gradle-plugin.html
+        classpath depends.kotlin.gradleplugin
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
