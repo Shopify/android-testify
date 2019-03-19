@@ -1,0 +1,2 @@
+# Number of commits between the PR and master from which we should block the merges
+threshold: 40
