@@ -8,14 +8,12 @@ import android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.os.Debug
 import android.os.Looper
-import android.support.annotation.FloatRange
-import android.support.annotation.IdRes
-import android.support.annotation.IntRange
-import android.support.annotation.LayoutRes
-import android.support.test.InstrumentationRegistry
-import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.espresso.Espresso
-import android.support.test.rule.ActivityTestRule
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry.getInstrumentation
+import androidx.test.espresso.Espresso
+import androidx.test.rule.ActivityTestRule
 import android.util.Pair
 import android.view.View
 import android.view.ViewGroup
@@ -32,15 +30,14 @@ import com.shopify.testify.internal.modification.HidePasswordViewModification
 import com.shopify.testify.internal.modification.HideScrollbarsViewModification
 import com.shopify.testify.internal.modification.HideTextSuggestionsViewModification
 import com.shopify.testify.internal.modification.SoftwareRenderViewModification
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-
 
 typealias ViewModification = (rootView: ViewGroup) -> Unit
 typealias EspressoActions = () -> Unit
@@ -56,6 +53,8 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
     private var defaultLocale: Locale? = null
     private var locale: Locale? = null
     private var exactness: Float? = null
+    private var defaultFontScale: Float? = null
+    private var fontScale: Float? = null
 
     private var assertSameInvoked = false
     private var hideSoftKeyboard = true
@@ -100,7 +99,8 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
     private val fullyQualifiedTestPath : String
         get() = testClass
 
-    fun setExactness(@FloatRange(from = 0.0, to = 1.0) exactness: Float): ScreenshotRule<T> {
+    fun setExactness(exactness: Float): ScreenshotRule<T> {
+        require(exactness in 0.0..1.0)
         this.exactness = exactness
         return this
     }
@@ -166,6 +166,11 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
         return this
     }
 
+    fun setFontScale(fontScale: Float): ScreenshotRule<T> {
+        this.fontScale = fontScale
+        return this
+    }
+
     fun setScreenshotViewProvider(viewProvider: ViewProvider): ScreenshotRule<T> {
         this.screenshotViewProvider = viewProvider
         return this
@@ -182,7 +187,8 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
      *
      * @param requestedOrientation SCREEN_ORIENTATION_LANDSCAPE or SCREEN_ORIENTATION_PORTRAIT
      */
-    fun setOrientation(@IntRange(from = SCREEN_ORIENTATION_LANDSCAPE.toLong(), to = SCREEN_ORIENTATION_PORTRAIT.toLong()) requestedOrientation: Int) {
+    fun setOrientation(requestedOrientation: Int) {
+        require(requestedOrientation in SCREEN_ORIENTATION_LANDSCAPE..SCREEN_ORIENTATION_PORTRAIT)
         if (activity.requestedOrientation != requestedOrientation) {
             val activityMonitor = getActivityMonitor()
             getInstrumentation().addMonitor(activityMonitor)
@@ -272,6 +278,11 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
                 LocaleHelper.setTestLocale(it)
             }
 
+            fontScale?.let {
+                defaultFontScale = testContext.resources.configuration.fontScale
+                FontScaleHelper.setTestFontScale(it)
+            }
+
             exactness?.let {
                 bitmapCompare = FuzzyCompare(it)
             }
@@ -333,6 +344,9 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(private val ac
             } finally {
                 defaultLocale?.let {
                     LocaleHelper.setTestLocale(it)
+                }
+                defaultFontScale?.let {
+                    FontScaleHelper.setTestFontScale(it)
                 }
             }
         } finally {

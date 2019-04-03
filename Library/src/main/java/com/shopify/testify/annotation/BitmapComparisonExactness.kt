@@ -24,7 +24,7 @@
 
 package com.shopify.testify.annotation
 
-import android.support.annotation.FloatRange
+import androidx.annotation.FloatRange
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 

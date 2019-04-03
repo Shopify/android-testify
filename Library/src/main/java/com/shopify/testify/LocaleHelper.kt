@@ -25,7 +25,7 @@
 package com.shopify.testify
 
 import android.content.res.Resources
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 
 import java.util.Locale
 
