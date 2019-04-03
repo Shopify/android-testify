@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.shopify.testify.annotation
+package com.shopify.testify
 
-import androidx.annotation.LayoutRes
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
+import android.content.res.Resources
+import androidx.test.InstrumentationRegistry
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
-annotation class TestifyLayout(@LayoutRes val layoutId: Int)
+internal object FontScaleHelper {
+
+    fun setTestFontScale(fontScale: Float) {
+        updateResources(InstrumentationRegistry.getTargetContext().resources, fontScale)
+        updateResources(Resources.getSystem(), fontScale)
+    }
+
+    private fun updateResources(resources: Resources, fontScale: Float) {
+        val config = resources.configuration
+        config.fontScale = fontScale
+        @Suppress("DEPRECATION")
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
+}

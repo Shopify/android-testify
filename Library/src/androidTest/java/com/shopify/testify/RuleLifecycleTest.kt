@@ -1,7 +1,7 @@
 package com.shopify.testify
 
-import android.support.test.annotation.UiThreadTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.annotation.UiThreadTest
+import androidx.test.runner.AndroidJUnit4
 import com.shopify.testify.annotation.ScreenshotInstrumentation
 import com.shopify.testify.internal.exception.AssertSameMustBeLastException
 import com.shopify.testify.internal.exception.NoScreenshotsOnUiThreadException

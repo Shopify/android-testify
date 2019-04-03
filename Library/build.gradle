@@ -1,15 +1,8 @@
-import com.android.ddmlib.DdmPreferences
-
 buildscript {
     repositories {
         jcenter()
         mavenCentral()
     }
-}
-
-plugins {
-    id "com.github.dcendents.android-maven" version "2.1"
-    id "com.jfrog.bintray" version "1.8.4"
 }
 
 apply plugin: 'com.android.library'
@@ -20,11 +13,10 @@ def VERSION_NAME = "$project.versions.testify"
 version = VERSION_NAME
 
 android {
-    DdmPreferences.setTimeOut(60000) // https://code.google.com/p/android/issues/detail?id=104305
-
     compileSdkVersion coreVersions.shopify.compileSdk
 
     lintOptions {
+        disable 'InvalidPackage', 'RtlSymmetry', 'RtlHardcoded', 'GoogleAppIndexingWarning', 'ObsoleteLintCustomCheck'
         abortOnError true
         warningsAsErrors true
         textOutput 'stdout'
@@ -37,7 +29,7 @@ android {
         targetSdkVersion coreVersions.shopify.targetSdk
         versionCode 1
         versionName VERSION_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -55,167 +47,16 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.returnDefaultValues = true
-        unitTests.all {
-            testLogging {
-                events "passed", "skipped", "failed", "standardOut", "standardError"
-                outputs.upToDateWhen { false }
-                showStandardStreams = true
-            }
-        }
-    }
-
     dependencies {
+        api depends.androidx.test.espresso.core
+        api depends.androidx.test.rules
 
-        api depends.support.test.espresso.core3
-        implementation depends.support.test.runner1
+        implementation depends.androidx.test.runner
         implementation depends.kotlin.stdlib7
+
         testImplementation depends.mockito.v2
         testImplementation depends.mockito.kotlin
-
-        implementation 'com.android.support.test:rules:1.0.2'
     }
 }
 
 //endregion
-
-ext {
-    pom = [
-            publishedGroupId  : 'com.shopify.testify',
-            artifact          : 'testify',
-            libraryName       : 'testify',
-            libraryDescription: 'Android screenshot instrumentation tests.',
-            siteUrl           : 'https://github.com/Shopify/android-testify',
-            gitUrl            : 'https://github.com/Shopify/android-testify.git',
-            licenseName       : 'The MIT License',
-            licenseUrl        : 'https://opensource.org/licenses/MIT'
-    ]
-}
-
-group = pom.publishedGroupId
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                groupId project.ext.pom.publishedGroupId
-                artifactId project.ext.pom.artifact
-                name project.ext.pom.libraryName
-                description project.ext.pom.libraryDescription
-                url project.ext.pom.siteUrl
-                licenses {
-                    license {
-                        name project.ext.pom.licenseName
-                        url project.ext.pom.licenseUrl
-                    }
-                }
-                scm {
-                    connection project.ext.pom.gitUrl
-                    developerConnection project.ext.pom.gitUrl
-                    url project.ext.pom.siteUrl
-                }
-            }
-        }
-    }
-}
-//endregion
-
-//region `javadocJar` task
-sourceSets {
-    javadoc {
-        java.srcDirs = ['src/main/java']
-    }
-}
-
-task javadoc(type: Javadoc) {
-    source = sourceSets.javadoc.allSource
-    title = "Android Testify"
-    description "Generates Javadoc"
-
-    options {
-        failOnError false
-    }
-
-    source = android.sourceSets.main.java.srcDirs
-    exclude '**/BuildConfig.java'
-    exclude '**/R.java'
-    exclude '**/R.html', '**/R.*.html', '**/index.html'
-    exclude('**/internal/**')
-
-    classpath = configurations.compile
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += project.files("build/generated/source/r/release", "build/generated/source/buildConfig/release")
-
-    android.libraryVariants.all { variant ->
-        if (variant.name == 'release') {
-            owner.classpath += variant.javaCompiler.classpath
-        }
-    }
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    baseName = 'testify'
-    from javadoc.destinationDir
-}
-//endregion `javadocJar` task
-
-//region `sourcesJar` task
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-//endregion
-
-ext {
-    bintray = [
-            org        : 'shopify',
-            repo       : 'shopify-android',
-            name       : 'testify',
-            allLicenses: ["MIT"]
-    ]
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-bintray {
-    // These values can be found on https://bintray.com/profile/edit
-    user = System.getenv('BINTRAY_USER') // BINTRAY_USER : your personal profile name (from "Your Profile")
-    key = System.getenv('BINTRAY_KEY') // BINTRAY_KEY : found on the left menu, under "API Key"
-
-    configurations = ['archives']
-
-    pkg {
-        userOrg = project.ext.bintray.org
-        repo = project.ext.bintray.repo
-        name = project.ext.bintray.name
-        desc = project.ext.pom.libraryDescription
-        websiteUrl = project.ext.pom.siteUrl
-        vcsUrl = project.ext.pom.gitUrl
-        licenses = project.ext.bintray.allLicenses
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = project.ext.pom.libraryDescription
-        }
-    }
-}
-
-bintrayUpload {
-    dependsOn install
-    doFirst {
-        if (System.getenv('BINTRAY_USER').isEmpty()) {
-            throw new IllegalArgumentException("BINTRAY_USER must be defined")
-        }
-        if (System.getenv('BINTRAY_KEY').isEmpty()) {
-            throw new IllegalArgumentException("BINTRAY_KEY must be defined")
-        }
-    }
-}
-//endregion `bintrayUpload` task
-

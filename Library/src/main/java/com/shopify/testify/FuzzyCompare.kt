@@ -25,9 +25,9 @@ package com.shopify.testify
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.support.annotation.ColorInt
-import android.support.annotation.FloatRange
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.ColorInt
+import androidx.annotation.FloatRange
+import androidx.annotation.VisibleForTesting
 
 internal class FuzzyCompare(@param:FloatRange(from = 0.0, to = 1.0) private val exactness: Float) : BitmapCompare {
 
