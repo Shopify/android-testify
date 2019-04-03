@@ -1,4 +1,6 @@
 buildscript {
+    ext.kotlin_version = '1.3.21'
+
     repositories {
         google()
         jcenter()
@@ -7,14 +9,17 @@ buildscript {
 
     ext {
         versions = [
-                'androidGradlePlugin': '3.3.2',    // https://developer.android.com/studio/releases/gradle-plugin.html
-                'androidxCoreTesting': '2.0.0-rc01',     // https://developer.android.com/jetpack/androidx/releases
-                'androidxEspresso'   : '3.1.0',          // https://developer.android.com/jetpack/androidx/releases
-                'androidxTest'       : '1.1.0',          // https://developer.android.com/jetpack/androidx/releases
-                'kotlin'             : '1.3.21',   // https://kotlinlang.org/
-                'mockito2'           : '2.23.0',         // https://github.com/mockito/mockito/releases
-                'mockitokotlin'      : '2.1.0',          // https://github.com/nhaarman/mockito-kotlin
-                'testify'            : '0.9.6',
+                'androidGradlePlugin'     : '3.3.2',    // https://developer.android.com/studio/releases/gradle-plugin.html
+                'androidxCoreTesting'     : '2.0.0-rc01',     // https://developer.android.com/jetpack/androidx/releases
+                'androidxEspresso'        : '3.1.0',          // https://developer.android.com/jetpack/androidx/releases
+                'androidxTest'            : '1.1.0',          // https://developer.android.com/jetpack/androidx/releases
+                'kotlin'                  : '1.3.21',   // https://kotlinlang.org/
+                'mockito2'                : '2.23.0',         // https://github.com/mockito/mockito/releases
+                'mockitokotlin'           : '2.1.0',          // https://github.com/nhaarman/mockito-kotlin
+                'testify'                 : '0.9.6',
+
+                'androidxConstraintLayout': '2.0.0-alpha3',          // https://developer.android.com/jetpack/androidx/releases
+                'androidxCore'            : '1.0.0',          // https://developer.android.com/jetpack/androidx/releases
         ]
         coreVersions = [
                 'shopify': [
@@ -33,13 +38,16 @@ buildscript {
                         'v2'    : "org.mockito:mockito-core:${versions.mockito2}"
                 ],
                 'androidx': [
-                        'test': [
+                        'appcompat'       : "androidx.appcompat:appcompat:${versions.androidxCore}",
+                        'constraintlayout': "androidx.constraintlayout:constraintlayout:${versions.androidxConstraintLayout}",
+                        'test'            : [
                                 'core'    : "androidx.arch.core:core-testing:${versions.androidxCoreTesting}",
                                 'espresso': [
                                         'core': "androidx.test.espresso:espresso-core:${versions.androidxEspresso}",
                                 ],
                                 'rules'   : "androidx.test:rules:${versions.androidxTest}",
                                 'runner'  : "androidx.test:runner:${versions.androidxTest}",
+                                'junit'      : "androidx.test.ext:junit:${versions.androidxTest}",
                         ],
                 ]
         ]
@@ -51,6 +59,7 @@ buildscript {
         classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.18"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

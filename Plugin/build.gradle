@@ -25,25 +25,6 @@ dependencies {
     implementation depends.kotlin.stdlib7
 }
 
-task configureLocal {
-    version = "local"
-    jar.manifest.attributes.put("Implementation-Version", version)
-}
-
-task copyLocal(type: Copy) {
-    from "build/libs/${project.name}-local.jar"
-    into 'jar'
-}
-
-task assembleLocal(description: 'Assembles the outputs of this project for use locally.', group: 'Build') {
-    dependsOn configureLocal
-    dependsOn build
-    dependsOn copyLocal
-
-    build.mustRunAfter configureLocal
-    copyLocal.mustRunAfter build
-}
-
 repositories {
     mavenCentral()
 }
@@ -68,6 +49,13 @@ ext {
             gitUrl            : 'https://github.com/Shopify/android-testify.git',
             licenseName       : 'The MIT License',
             licenseUrl        : 'https://opensource.org/licenses/MIT'
+    ]
+
+    bintray = [
+            org        : 'shopify',
+            repo       : 'shopify-android',
+            name       : 'testify-plugin',
+            allLicenses: ["MIT"]
     ]
 }
 
@@ -130,15 +118,6 @@ artifacts {
     archives sourcesJar
 }
 
-ext {
-    bintray = [
-            org        : 'shopify',
-            repo       : 'shopify-android',
-            name       : 'testify-plugin',
-            allLicenses: ["MIT"]
-    ]
-}
-
 bintray {
     // These values can be found on https://bintray.com/profile/edit
     user = System.getenv('BINTRAY_USER')
@@ -173,4 +152,23 @@ bintrayUpload {
             throw new IllegalArgumentException("BINTRAY_KEY must be defined")
         }
     }
+}
+
+task configureLocal {
+    version = "local"
+    jar.manifest.attributes.put("Implementation-Version", version)
+}
+
+task copyLocal(type: Copy) {
+    from "$buildDir/libs/${project.name}-local.jar"
+    into 'jar'
+}
+
+task assembleLocal(description: 'Assembles the outputs of this project for use locally.', group: 'Build') {
+    dependsOn configureLocal
+    dependsOn build
+    dependsOn copyLocal
+
+    build.mustRunAfter configureLocal
+    copyLocal.mustRunAfter build
 }

@@ -25,6 +25,7 @@ package com.shopify.testify.tasks.main
 
 import com.shopify.testify.internal.Adb
 import com.shopify.testify.internal.AnsiFormat
+import com.shopify.testify.internal.Device
 import com.shopify.testify.internal.assurePath
 import com.shopify.testify.internal.getDestinationImageDirectory
 import com.shopify.testify.internal.getDeviceImageDirectory
@@ -45,6 +46,11 @@ open class ScreenshotPullTask : TestifyDefaultTask() {
 
     override fun taskAction() {
         println("  Pulling screenshots:")
+
+        if (!Device.hasRootAccess) {
+            println(AnsiFormat.Red, "  Permission denied trying to access device directory. Try running 'adb root'.")
+            return
+        }
 
         val failedScreenshots = project.listFailedScreenshots()
         if (failedScreenshots.isEmpty()) {

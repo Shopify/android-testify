@@ -1,2 +1,3 @@
-include 'Plugin'
-include 'Library'
+include ':Sample'
+include ':Plugin'
+include ':Library'

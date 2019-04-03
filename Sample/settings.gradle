@@ -1,4 +1,0 @@
-include ':app'
-include ':Testify-Library'
-
-project(':Testify-Library').projectDir = new File('../Library')

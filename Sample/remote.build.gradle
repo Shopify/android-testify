@@ -4,7 +4,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath files("${project.rootDir.path}//Plugin/build/libs/Plugin-local.jar")
+        classpath "com.shopify.testify:plugin:${versions.testify}"
     }
 }
 
@@ -45,9 +45,7 @@ dependencies {
     implementation depends.kotlin.stdlib7
     implementation depends.androidx.appcompat
 
-    androidTestImplementation project(":Library")
     androidTestImplementation depends.androidx.test.junit
     androidTestImplementation depends.androidx.test.runner
-    androidTestImplementation depends.androidx.test.rules
     androidTestImplementation depends.androidx.test.espresso.core
 }

@@ -28,79 +28,86 @@ object Device {
 
     fun version(): Int {
         val result = Adb().arguments(
-                "shell",
-                "getprop",
-                "ro.build.version.sdk")
-                .execute()
+            "shell",
+            "getprop",
+            "ro.build.version.sdk")
+            .execute()
         return result.trim().toInt()
     }
 
     fun language(): String {
         return if (version() <= 21) {
             Adb().arguments(
-                    "shell",
-                    "getprop",
-                    "ro.product.locale.language")
-                    .execute().trim()
+                "shell",
+                "getprop",
+                "ro.product.locale.language")
+                .execute().trim()
         } else {
             Adb().arguments(
-                    "shell",
-                    "getprop",
-                    "ro.product.locale")
-                    .execute().trim().split("-").first()
+                "shell",
+                "getprop",
+                "ro.product.locale")
+                .execute().trim().split("-").first()
         }
     }
 
     fun locale(): String {
         return if (version() <= 21) {
             val language = Adb().arguments(
-                    "shell",
-                    "getprop",
-                    "ro.product.locale.language")
-                    .execute().trim()
+                "shell",
+                "getprop",
+                "ro.product.locale.language")
+                .execute().trim()
             val region = Adb().arguments(
-                    "shell",
-                    "getprop",
-                    "ro.product.locale.region")
-                    .execute().trim()
+                "shell",
+                "getprop",
+                "ro.product.locale.region")
+                .execute().trim()
             "$language-$region"
         } else {
             Adb().arguments(
-                    "shell",
-                    "getprop",
-                    "ro.product.locale")
-                    .execute()
+                "shell",
+                "getprop",
+                "ro.product.locale")
+                .execute()
         }
     }
 
     fun timeZone(): String {
         val result = Adb().arguments(
-                "shell",
-                "getprop",
-                "persist.sys.timezone")
-                .execute()
+            "shell",
+            "getprop",
+            "persist.sys.timezone")
+            .execute()
         return result.trim()
     }
 
     fun displayDensity(): Int {
         val densityLine = Adb().arguments(
-                "shell",
-                "wm",
-                "density")
-                .execute().trim()
+            "shell",
+            "wm",
+            "density")
+            .execute().trim()
         return densityLine.substring("Physical density: ".length).trim().toInt()
     }
 
     fun displaySize(): String {
         val sizeLine = Adb().arguments(
-                "shell",
-                "wm",
-                "size")
-                .execute().trim()
+            "shell",
+            "wm",
+            "size")
+            .execute().trim()
         return sizeLine.substring("Physical size: ".length).trim()
     }
 
     fun deviceKey(language: String = Device.language()): String {
         return "${version()}-${displaySize()}@${displayDensity()}dp-$language"
     }
+
+    val hasRootAccess: Boolean
+        get() = Adb().arguments(
+            "shell",
+            "ls",
+            "data/data")
+            .execute().trim().isNotEmpty()
 }
