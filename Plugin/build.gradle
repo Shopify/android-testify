@@ -3,51 +3,60 @@ buildscript {
         jcenter()
         mavenCentral()
     }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+def VERSION_NAME = "$project.versions.testify"
+
+version = VERSION_NAME
+
+android {
+    compileSdkVersion coreVersions.shopify.compileSdk
+
+    lintOptions {
+        disable 'InvalidPackage', 'RtlSymmetry', 'RtlHardcoded', 'GoogleAppIndexingWarning', 'ObsoleteLintCustomCheck'
+        abortOnError true
+        warningsAsErrors true
+        textOutput 'stdout'
+        textReport true
+        xmlReport false
+    }
+
+    defaultConfig {
+        minSdkVersion coreVersions.shopify.minSdk
+        targetSdkVersion coreVersions.shopify.targetSdk
+        versionCode 1
+        versionName VERSION_NAME
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all { output ->
+            if (output.outputFile != null && output.outputFile.name.endsWith('.aar')) {
+                outputFileName = "${archivesBaseName}-${version}.aar"
+            }
+        }
+    }
+
     dependencies {
-        classpath depends.kotlin.gradleplugin
+        api depends.androidx.test.espresso.core
+        api depends.androidx.test.rules
+
+        implementation depends.androidx.test.runner
+        implementation depends.kotlin.stdlib7
+
+        testImplementation depends.mockito.v2
+        testImplementation depends.mockito.kotlin
     }
 }
 
-apply plugin: 'groovy'
-apply plugin: 'kotlin'
-
-sourceCompatibility = 1.7
-
-dependencies {
-    implementation "com.android.tools.build:gradle:${versions.androidGradlePlugin}"
-    implementation gradleApi()
-    implementation depends.kotlin.stdlib7
-}
-
-task configureLocal {
-    version = "local"
-    jar.manifest.attributes.put("Implementation-Version", version)
-}
-
-task copyLocal(type: Copy) {
-    from "build/libs/${project.name}-local.jar"
-    into 'jar'
-}
-
-task assembleLocal(description: 'Assembles the outputs of this project for use locally.', group: 'Build') {
-    dependsOn configureLocal
-    dependsOn build
-    dependsOn copyLocal
-
-    build.mustRunAfter configureLocal
-    copyLocal.mustRunAfter build
-}
-
-repositories {
-    mavenCentral()
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
+//endregion
