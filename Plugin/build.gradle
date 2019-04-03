@@ -8,10 +8,16 @@ buildscript {
     }
 }
 
-apply plugin: 'groovy'
-apply plugin: 'kotlin'
+plugins {
+    id 'groovy'
+    id 'kotlin'
+    id 'com.github.dcendents.android-maven'
+    id 'com.jfrog.bintray'
+    id 'org.jetbrains.dokka'
+}
 
-sourceCompatibility = 1.7
+def VERSION_NAME = "$project.versions.testify"
+sourceCompatibility = 1.8
 
 dependencies {
     implementation "com.android.tools.build:gradle:${versions.androidGradlePlugin}"
@@ -49,5 +55,122 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+ext {
+    pom = [
+            publishedGroupId  : 'com.shopify.testify',
+            artifact          : 'plugin',
+            libraryName       : 'testify-plugin',
+            libraryDescription: 'Android screenshot instrumentation tests plugin.',
+            siteUrl           : 'https://github.com/Shopify/android-testify',
+            gitUrl            : 'https://github.com/Shopify/android-testify.git',
+            licenseName       : 'The MIT License',
+            licenseUrl        : 'https://opensource.org/licenses/MIT'
+    ]
+}
+
+group = pom.publishedGroupId
+version = VERSION_NAME
+
+jar {
+    manifest {
+        attributes "Implementation-Title": "Testify"
+        attributes "Implementation-Vendor": "Shopify"
+        attributes "Implementation-Version": version
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'jar'
+                groupId project.ext.pom.publishedGroupId
+                artifactId project.ext.pom.artifact
+                name project.ext.pom.libraryName
+                description project.ext.pom.libraryDescription
+                url project.ext.pom.siteUrl
+                licenses {
+                    license {
+                        name project.ext.pom.licenseName
+                        url project.ext.pom.licenseUrl
+                    }
+                }
+                scm {
+                    connection project.ext.pom.gitUrl
+                    developerConnection project.ext.pom.gitUrl
+                    url project.ext.pom.siteUrl
+                }
+            }
+        }
+    }
+}
+
+dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    includeNonPublic = false
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.groovy.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    baseName = 'testify'
+    from dokka.outputDirectory
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+ext {
+    bintray = [
+            org        : 'shopify',
+            repo       : 'shopify-android',
+            name       : 'testify-plugin',
+            allLicenses: ["MIT"]
+    ]
+}
+
+bintray {
+    // These values can be found on https://bintray.com/profile/edit
+    user = System.getenv('BINTRAY_USER')
+    // BINTRAY_USER : your personal profile name (from "Your Profile")
+    key = System.getenv('BINTRAY_KEY') // BINTRAY_KEY : found on the left menu, under "API Key"
+
+    configurations = ['archives']
+
+    pkg {
+        userOrg = project.ext.bintray.org
+        repo = project.ext.bintray.repo
+        name = project.ext.bintray.name
+        desc = project.ext.pom.libraryDescription
+        websiteUrl = project.ext.pom.siteUrl
+        vcsUrl = project.ext.pom.gitUrl
+        licenses = project.ext.bintray.allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = project.ext.pom.libraryDescription
+        }
+    }
+}
+
+bintrayUpload {
+    dependsOn install
+    doFirst {
+        if (System.getenv('BINTRAY_USER').isEmpty()) {
+            throw new IllegalArgumentException("BINTRAY_USER must be defined")
+        }
+        if (System.getenv('BINTRAY_KEY').isEmpty()) {
+            throw new IllegalArgumentException("BINTRAY_KEY must be defined")
+        }
     }
 }

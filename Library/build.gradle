@@ -63,7 +63,6 @@ android {
     dependencies {
         implementation depends.androidx.test.espresso.core
         implementation depends.androidx.test.rules
-
         implementation depends.androidx.test.runner
         implementation depends.kotlin.stdlib7
 
@@ -140,7 +139,7 @@ ext {
 }
 
 artifacts {
-//    archives javadocJar
+    archives javadocJar
     archives sourcesJar
 }
 
