@@ -5,8 +5,13 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'com.github.dcendents.android-maven'
+    id 'com.jfrog.bintray'
+    id 'org.jetbrains.dokka'
+}
 
 def VERSION_NAME = "$project.versions.testify"
 
@@ -16,7 +21,6 @@ android {
     compileSdkVersion coreVersions.shopify.compileSdk
 
     lintOptions {
-        disable 'InvalidPackage', 'RtlSymmetry', 'RtlHardcoded', 'GoogleAppIndexingWarning', 'ObsoleteLintCustomCheck'
         abortOnError true
         warningsAsErrors true
         textOutput 'stdout'
@@ -40,16 +44,25 @@ android {
     }
 
     libraryVariants.all { variant ->
-        variant.outputs.all { output ->
-            if (output.outputFile != null && output.outputFile.name.endsWith('.aar')) {
-                outputFileName = "${archivesBaseName}-${version}.aar"
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${version}.aar"
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            testLogging {
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
             }
         }
     }
 
     dependencies {
-        api depends.androidx.test.espresso.core
-        api depends.androidx.test.rules
+        implementation depends.androidx.test.espresso.core
+        implementation depends.androidx.test.rules
 
         implementation depends.androidx.test.runner
         implementation depends.kotlin.stdlib7
@@ -59,4 +72,110 @@ android {
     }
 }
 
-//endregion
+ext {
+    pom = [
+            publishedGroupId  : 'com.shopify.testify',
+            artifact          : 'testify',
+            libraryName       : 'testify',
+            libraryDescription: 'Android screenshot instrumentation tests.',
+            siteUrl           : 'https://github.com/Shopify/android-testify',
+            gitUrl            : 'https://github.com/Shopify/android-testify.git',
+            licenseName       : 'The MIT License',
+            licenseUrl        : 'https://opensource.org/licenses/MIT'
+    ]
+}
+
+group = pom.publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId project.ext.pom.publishedGroupId
+                artifactId project.ext.pom.artifact
+                name project.ext.pom.libraryName
+                description project.ext.pom.libraryDescription
+                url project.ext.pom.siteUrl
+                licenses {
+                    license {
+                        name project.ext.pom.licenseName
+                        url project.ext.pom.licenseUrl
+                    }
+                }
+                scm {
+                    connection project.ext.pom.gitUrl
+                    developerConnection project.ext.pom.gitUrl
+                    url project.ext.pom.siteUrl
+                }
+            }
+        }
+    }
+}
+
+dokka {
+    outputFormat = "html"
+    outputDirectory = "$buildDir/javadoc"
+    includeNonPublic = false
+}
+
+task javadocJar(type: Jar, dependsOn: dokka) {
+    classifier = 'javadoc'
+    baseName = 'testify'
+    from dokka.outputDirectory
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+ext {
+    bintray = [
+            org        : 'shopify',
+            repo       : 'shopify-android',
+            name       : 'testify',
+            allLicenses: ["MIT"]
+    ]
+}
+
+artifacts {
+//    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    // These values can be found on https://bintray.com/profile/edit
+    user = System.getenv('BINTRAY_USER')
+    // BINTRAY_USER : your personal profile name (from "Your Profile")
+    key = System.getenv('BINTRAY_KEY') // BINTRAY_KEY : found on the left menu, under "API Key"
+
+    configurations = ['archives']
+
+    pkg {
+        userOrg = project.ext.bintray.org
+        repo = project.ext.bintray.repo
+        name = project.ext.bintray.name
+        desc = project.ext.pom.libraryDescription
+        websiteUrl = project.ext.pom.siteUrl
+        vcsUrl = project.ext.pom.gitUrl
+        licenses = project.ext.bintray.allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = project.ext.pom.libraryDescription
+        }
+    }
+}
+
+bintrayUpload {
+    dependsOn install
+    doFirst {
+        if (System.getenv('BINTRAY_USER').isEmpty()) {
+            throw new IllegalArgumentException("BINTRAY_USER must be defined")
+        }
+        if (System.getenv('BINTRAY_KEY').isEmpty()) {
+            throw new IllegalArgumentException("BINTRAY_KEY must be defined")
+        }
+    }
+}
