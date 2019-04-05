@@ -2,10 +2,8 @@
 
 Add screenshots to your Android tests
 
-|  ![](https://travis-ci.com/Shopify/android-testify.svg?token=sYqH7qszpSqeVUazMVxV&branch=master)  |   [ ![Download](https://api.bintray.com/packages/shopify/shopify-android/testify/images/download.svg) ](https://bintray.com/shopify/shopify-android/testify/_latestVersion)  |  [ ![Download](https://api.bintray.com/packages/shopify/shopify-android/testify-plugin/images/download.svg) ](https://bintray.com/shopify/shopify-android/testify-plugin/_latestVersion)  |
-|:------:|:-------:|:------:|
-| Travis | Library | Plugin |
-
+<a href="https://travis-ci.com/Shopify/android-testify"><img alt="Travis CI" src="https://travis-ci.com/Shopify/android-testify.svg?token=sYqH7qszpSqeVUazMVxV&branch=master"/></a> <a href="https://bintray.com/shopify/shopify-android/testify/_latestVersion"><img alt="Testify library download" src="https://api.bintray.com/packages/shopify/shopify-android/testify/images/download.svg"/></a> <a href="https://bintray.com/shopify/shopify-android/testify-plugin/_latestVersion"><img alt="Testify plugin download" src="https://api.bintray.com/packages/shopify/shopify-android/testify-plugin/images/download.svg"/></a>
+---
 
 Expand your test coverage by including the View-layer. Testify allows you to easily set up a variety of screenshot tests in your application. Capturing a screenshot of your view gives you a new tool for monitoring the quality of your UI experience. It's also an easy way to review changes to your UI. Once you've established a comprehensive set of screenshots for your application, you can use them as a "visual dictionary". In this case, a picture really is worth a thousand words; it's easy to catch unintended changes in your view rendering by watching for differences in your captured images.
 
