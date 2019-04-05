@@ -23,7 +23,7 @@ buildscript {
                 'maven'                   : '2.1',            // https://github.com/dcendents/android-maven-gradle-plugin/releases
                 'mockito2'                : '2.23.0',         // https://github.com/mockito/mockito/releases
                 'mockitokotlin'           : '2.1.0',          // https://github.com/nhaarman/mockito-kotlin
-                'testify'                 : '0.9.6',
+                'testify'                 : '1.0.0-alpha1',   // https://github.com/Shopify/android-testify/releases
         ]
         coreVersions = [
                 'shopify': [

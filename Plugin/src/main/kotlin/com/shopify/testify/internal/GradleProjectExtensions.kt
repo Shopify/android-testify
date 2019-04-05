@@ -30,4 +30,4 @@ import org.gradle.api.Project
 
 val Project.android: TestedExtension
     get() = this.properties["android"] as? TestedExtension
-            ?: throw GradleException("Gradle project must contain an `android` closure")
+        ?: throw GradleException("Gradle project must contain an `android` closure")

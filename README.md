@@ -11,19 +11,28 @@ Testify screenshot tests are built on top of [Android Instrumentation tests](htt
 
 You can easily capture screenshots with different resolutions, orientations, API versions and languages by simply configuring different emulators. Testify natively supports grouping screenshot tests by device characteristics. Testify captures a bitmap of your specified View after all layout and draw calls have completed so you know that you're capturing an authentic rendering representative of what your users will see in your final product.
 
-# Download
+# Set up Testify
+
+Before building your screenshot test with Testify, make sure to set a dependency reference to the Testify plugin:
+
 ```groovy
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath "com.shopify.testify:plugin:0.9.6"
+        classpath "com.shopify.testify:plugin:1.0.0-alpha1"
     }
 }
 
 apply plugin: 'com.shopify.testify'
 ```
+
+It is required for you to turn off animations on your test device — leaving system animations turned on in the test device might cause synchronization issues which may lead your test to fail. Turn off animations from _Settings_ by opening _Developer options_ and turning all the following options off:
+
+- **Window animation scale**
+- **Transition animation scale**
+- **Animator duration scale**
 
 # Library projects
 
@@ -35,7 +44,13 @@ testify {
 }
 ```
 
-# Writing a test
+# Write a test
+
+Testify is a subclass of Android's [`ActivityTestRule`](https://developer.android.com/reference/androidx/test/rule/ActivityTestRule.html). The testing framework launches the activity under test before each test method annotated with [`@Test`](https://junit.org/junit4/javadoc/latest/org/junit/Test.html) and before any method annotated with [`@Before`](http://junit.sourceforge.net/javadoc/org/junit/Before.html). 
+
+Each screenshot test method must be annotated with the `@ScreenshotInstrumentation` annotation.
+
+Within your test method, you can configure the `Activity` as needed and call `assertSame()` to capture and validate your UI. The framework handles shutting down the activity after the test finishes and all methods annotated with [`@After`](http://junit.sourceforge.net/javadoc/org/junit/After.html) are run.
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -52,6 +67,43 @@ class MainActivityScreenshotTest {
 ```
 For additional testing scenarios, please refer to the [recipe book](RECIPES.md).
 
+# Update your baseline
+
+Testify works by referencing a PNG baseline found in your `androidTest/assets` directory for each test case that you write. As you write and run tests, an updated baseline image is maintained on your device or emulator. In order to update the baseline, you need to copy or pull the image from the device to your local development environment. Testify offers a variety of Gradle tasks to simplify the copying of your baseline images.
+
+### Pull images from the device
+
+Copy images from the `app_images` directory on your emulator to your local `androidTest/assets` directory.
+
+```bash
+./gradlew screenshotPull
+```
+
+### Record a new baseline
+
+Run all the screenshot tests in your app and update the local baseline.
+
+```bash
+./gradlew screenshotRecord
+```
+
+### Verify the tests
+
+Run all the screenshot tests in your app and fail if any differences from the baseline are detected.
+
+```bash
+./gradlew :screenshotTest
+```
+
+### Erase any existing images from the device
+
+Clear any baseline images that may be remaining on your emulator.
+
+```bash
+./gradlew :screenshotClear
+```
+
+There are a variety of additional Gradle commands available through the Testify plugin. For advance usage, please refer to the [Plugin guide](Plugin/README.md).
 
 # License
 

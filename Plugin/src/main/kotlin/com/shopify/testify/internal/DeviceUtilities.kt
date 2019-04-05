@@ -40,10 +40,9 @@ internal fun Project.listFailedScreenshots(): List<String> {
     val dst = getDestinationImageDirectory()
 
     val log = Adb()
-            .argument("shell ls $src*.png")
-            .argument("2>/dev/null")
-            .execute()
-
+        .argument("shell ls $src*.png")
+        .argument("2>/dev/null")
+        .execute()
 
     val files = ArrayList<String>()
     log.lines().forEach {
@@ -57,9 +56,9 @@ internal fun Project.listFailedScreenshots(): List<String> {
 
 internal fun File.deleteOnDevice() {
     Adb()
-            .argument("shell")
-            .argument("rm")
-            .argument(this.path)
-            .stream(true)
-            .execute()
+        .argument("shell")
+        .argument("rm")
+        .argument(this.path)
+        .stream(true)
+        .execute()
 }

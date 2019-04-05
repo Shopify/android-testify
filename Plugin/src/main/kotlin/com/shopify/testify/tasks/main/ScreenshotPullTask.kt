@@ -78,10 +78,10 @@ open class ScreenshotPullTask : TestifyDefaultTask() {
         println()
 
         Adb()
-                .argument("pull")
-                .argument(src)
-                .argument(dst)
-                .execute()
+            .argument("pull")
+            .argument(src)
+            .argument(dst)
+            .execute()
 
         Thread.sleep(project.testifySettings.pullWaitTime)
     }

@@ -35,13 +35,13 @@ open class DisableSoftKeyboardTask : TestifyUtilityTask() {
     override fun taskAction() {
 
         Adb().arguments(
-                "shell",
-                "settings",
-                "put",
-                "secure",
-                "show_ime_with_hard_keyboard",
-                "0")
-                .execute()
+            "shell",
+            "settings",
+            "put",
+            "secure",
+            "show_ime_with_hard_keyboard",
+            "0")
+            .execute()
 
         println("  Success")
     }

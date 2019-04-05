@@ -29,16 +29,17 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 internal data class TestifySettings(
-        var applicationPackageId: String,
-        var baselineSourceDir: String,
-        var moduleName: String,
-        var outputFileNameFormat: String?,
-        var pullWaitTime: Long = 0L,
-        var testRunner: String,
-        var useSdCard: Boolean,
-        var testContextId: String,
-        var testPackageId: String,
-        var applicationIdSuffix: String) {
+    var applicationPackageId: String,
+    var baselineSourceDir: String,
+    var moduleName: String,
+    var outputFileNameFormat: String?,
+    var pullWaitTime: Long = 0L,
+    var testRunner: String,
+    var useSdCard: Boolean,
+    var testContextId: String,
+    var testPackageId: String,
+    var applicationIdSuffix: String
+) {
 
     fun override(extension: TestifyExtension): TestifySettings {
         if (extension.applicationPackageId?.isNotEmpty() == true) {
@@ -91,7 +92,7 @@ internal data class TestifySettings(
     }
 }
 
-fun createTestContextId(applicationPackageId: String, applicationIdSuffix: String) : String {
+fun createTestContextId(applicationPackageId: String, applicationIdSuffix: String): String {
     return if (applicationPackageId.isEmpty()) "" else "$applicationPackageId$applicationIdSuffix"
 }
 
@@ -110,16 +111,16 @@ internal class TestifySettingsFactory {
             val testPackageId = android.testVariants?.first()?.applicationId ?: ""
 
             return TestifySettings(
-                    applicationPackageId = applicationPackageId,
-                    baselineSourceDir = baselineSourceDir,
-                    moduleName = project.name,
-                    outputFileNameFormat = null,
-                    pullWaitTime = 0L,
-                    testRunner = testRunner,
-                    useSdCard = false,
-                    testContextId = testContextId,
-                    testPackageId = testPackageId,
-                    applicationIdSuffix = applicationIdSuffix
+                applicationPackageId = applicationPackageId,
+                baselineSourceDir = baselineSourceDir,
+                moduleName = project.name,
+                outputFileNameFormat = null,
+                pullWaitTime = 0L,
+                testRunner = testRunner,
+                useSdCard = false,
+                testContextId = testContextId,
+                testPackageId = testPackageId,
+                applicationIdSuffix = applicationIdSuffix
             )
         }
     }
@@ -151,4 +152,3 @@ fun Project.validateExtension() {
 fun Project.getTestifyExtension(): TestifyExtension = this.extensions.findByType(TestifyExtension::class.java)!!
 
 data class GradleExtensionException(override val message: String) : GradleException(message)
-

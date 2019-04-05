@@ -23,7 +23,6 @@
  */
 package com.shopify.testify.tasks.main
 
-import com.shopify.testify.TestifyPlugin
 import com.shopify.testify.TestifySettings
 import com.shopify.testify.internal.Adb
 import com.shopify.testify.internal.AdbParam
@@ -37,7 +36,6 @@ import com.shopify.testify.tasks.internal.TestifyDefaultTask
 import com.shopify.testify.tasks.utility.DisableSoftKeyboardTask
 import com.shopify.testify.tasks.utility.HidePasswordsTasks
 import com.shopify.testify.tasks.utility.LocaleTask
-import com.shopify.testify.tasks.utility.SettingsTask
 import com.shopify.testify.tasks.utility.TimeZoneTask
 import com.shopify.testify.testifySettings
 import org.gradle.api.Project
@@ -110,20 +108,20 @@ open class ScreenshotTestTask : TestifyDefaultTask() {
 
         val testOptions = TestOptionsBuilder()
         testOptions
-                .addAll(shardParams)
-                .add(testTarget)
-                .addAll(runtimeParams)
-                .add(annotation)
+            .addAll(shardParams)
+            .add(testTarget)
+            .addAll(runtimeParams)
+            .add(annotation)
 
         val log = Adb()
-                .shell()
-                .argument("am")
-                .argument("instrument")
-                .testOptions(testOptions)
-                .argument("-w")
-                .argument("${settings.testPackageId}/${settings.testRunner}")
-                .stream(true)
-                .execute()
+            .shell()
+            .argument("am")
+            .argument("instrument")
+            .testOptions(testOptions)
+            .argument("-w")
+            .argument("${settings.testPackageId}/${settings.testRunner}")
+            .stream(true)
+            .execute()
 
         if (!isRecordMode && (log.contains("FAILURES!!!") || log.contains("INSTRUMENTATION_CODE: 0") || log.contains("Process crashed while executing"))) {
             println(AnsiFormat.Red, "SCREENSHOT TESTS HAVE FAILED!!!")
@@ -143,10 +141,10 @@ open class ScreenshotTestTask : TestifyDefaultTask() {
             val task = project.tasks.getByName(taskNameProvider.taskName())
 
             task.dependsOn(
-                    HidePasswordsTasks.taskName(),
-                    DisableSoftKeyboardTask.taskName(),
-                    LocaleTask.taskName(),
-                    TimeZoneTask.taskName()
+                HidePasswordsTasks.taskName(),
+                DisableSoftKeyboardTask.taskName(),
+                LocaleTask.taskName(),
+                TimeZoneTask.taskName()
             )
 
             val installDebugAndroidTestTask = project.tasks.findByPath(":${project.testifySettings.moduleName}:installDebugAndroidTest")
