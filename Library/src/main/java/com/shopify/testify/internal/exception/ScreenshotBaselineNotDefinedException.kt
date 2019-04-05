@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,5 +24,4 @@
 
 package com.shopify.testify.internal.exception
 
-class ScreenshotBaselineNotDefinedException(moduleName: String, testName: String, testClass: String) : Exception("\n\n*  A baseline screenshot could not be found for '" + testName + "'.\n" +
-    "*  To record a baseline screenshot, run `./gradlew " + moduleName + "screenshotRecord -PtestClass=" + testClass + "`\n")
+class ScreenshotBaselineNotDefinedException(moduleName: String, testName: String, testClass: String) : Exception("\n\n*  A baseline screenshot could not be found for '$testName'.\n*  To record a baseline screenshot, run `./gradlew $moduleName:screenshotRecord -PtestClass=$testClass`\n")

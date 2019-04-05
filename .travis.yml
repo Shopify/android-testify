@@ -1,17 +1,43 @@
 language: android
-jdk: oraclejdk8
+
+jdk:
+  - oraclejdk8
+
 android:
   components:
-  - tools
-  - platform-tools
-  - build-tools-28.0.3
-  - android-23
-  - android-28
-  - extra-android-m2repository
+    - tools
+    - platform-tools
+    - build-tools-28.0.3
+    - android-28
+    - android-22
+    - sys-img-armeabi-v7a-android-22
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
 
 script:
-  - ./gradlew Library:assemble --console=plain
-  - ./gradlew Plugin:assemble --console=plain
-  - ./gradlew Library:lint --console=plain
-  - ./gradlew Plugin:test --console=plain
-  - ./gradlew Library:test --console=plain
+  - ./gradlew Library:assemble
+  - ./gradlew Plugin:assemble
+  - ./gradlew Sample:assemble
+  - ./gradlew Library:lint
+  - ./gradlew Plugin:test
+  - ./gradlew Library:test
+  - ./gradlew Library:connectedDebugAndroidTest
+  - ./gradlew Sample:screenshotTest
+  
+before_script:
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82
+
+env:
+  global:
+    - GRADLE_OPTS="-Xmx2048m"
+    - ADB_INSTALL_TIMEOUT=8
+
+notifications:
+  email: false
+
+sudo: false

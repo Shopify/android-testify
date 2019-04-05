@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.shopify.testify.internal.capture
 
-package com.shopify.testify
+import android.app.Activity
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.view.View
 
-import android.content.res.Resources
-import androidx.test.InstrumentationRegistry
+@Suppress("unused")
+fun createBitmapFromCanvas(activity: Activity, targetView: View?): Bitmap {
+    val view: View = targetView ?: activity.window.decorView
+    val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    val drawable = view.background
 
-import java.util.Locale
+    drawable?.draw(canvas) ?: canvas.drawColor(Color.WHITE)
+    view.draw(canvas)
 
-internal object LocaleHelper {
-
-    @JvmStatic
-    fun setTestLocale(locale: Locale) {
-        Locale.setDefault(locale)
-        setResourcesLocale(InstrumentationRegistry.getTargetContext().resources, locale)
-        setResourcesLocale(Resources.getSystem(), locale)
-    }
-
-    @SuppressWarnings("deprecation")
-    private fun setResourcesLocale(resources: Resources, locale: Locale) {
-        val configuration = resources.configuration
-        configuration.setLocale(locale)
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-    }
-
+    return bitmap
 }
