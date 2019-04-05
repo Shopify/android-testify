@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.shopify.testify
+package com.shopify.testify.internal
 
 import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Pair
-import android.view.Display
 import android.view.WindowManager
 
 import java.util.Locale

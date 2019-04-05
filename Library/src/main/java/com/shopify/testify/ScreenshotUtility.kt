@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Debug
 import android.os.Environment
-import androidx.test.InstrumentationRegistry
 import android.util.Log
 import android.view.View
-
+import androidx.test.platform.app.InstrumentationRegistry
+import com.shopify.testify.internal.DeviceIdentifier
+import com.shopify.testify.internal.capture.Capture
+import com.shopify.testify.internal.capture.createBitmapFromDrawingCache
 import com.shopify.testify.internal.exception.ScreenshotDirectoryNotFoundException
-
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -44,7 +45,7 @@ import java.util.Locale
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-internal class ScreenshotUtility : BitmapCompare {
+internal class ScreenshotUtility {
     private var locale: Locale? = null
 
     private val localeIdentifier: String
@@ -58,17 +59,6 @@ internal class ScreenshotUtility : BitmapCompare {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             return options
         }
-
-    private fun createBitmapFromView(activity: Activity, targetView: View?): Bitmap {
-        var v = targetView
-        if (v == null) {
-            v = activity.window.decorView
-        }
-        v!!.isDrawingCacheEnabled = true
-        val bitmap = Bitmap.createBitmap(v.drawingCache)
-        v.isDrawingCacheEnabled = false
-        return bitmap
-    }
 
     @Throws(Exception::class)
     private fun saveBitmapToFile(context: Context, bitmap: Bitmap?, outputFilePath: String): Boolean {
@@ -98,14 +88,12 @@ internal class ScreenshotUtility : BitmapCompare {
     }
 
     private fun getOutputDirectoryPath(context: Context): File {
-        val extras = InstrumentationRegistry.getArguments()
-
         val path: File
-        if (useSdCard()) {
+        path = if (useSdCard()) {
             val sdCard = Environment.getExternalStorageDirectory()
-            path = File(sdCard.absolutePath + SDCARD_DESTINATION_DIR)
+            File(sdCard.absolutePath + SDCARD_DESTINATION_DIR)
         } else {
-            path = context.getDir(DATA_DESTINATION_DIR, Context.MODE_PRIVATE)
+            context.getDir(DATA_DESTINATION_DIR, Context.MODE_PRIVATE)
         }
         return path
     }
@@ -118,7 +106,7 @@ internal class ScreenshotUtility : BitmapCompare {
     private fun loadBitmapFromAsset(context: Context, filePath: String): Bitmap? {
         val assetManager = context.assets
         var inputStream: InputStream? = null
-        var bitmap: Bitmap? = null
+        var bitmap: Bitmap?
         try {
             inputStream = assetManager.open(filePath)
             bitmap = BitmapFactory.decodeStream(inputStream, null, preferredBitmapOptions)
@@ -133,7 +121,6 @@ internal class ScreenshotUtility : BitmapCompare {
                     Log.e(LOG_TAG, "Unable to close input stream.", e)
                     bitmap = null
                 }
-
             }
         }
         return bitmap
@@ -142,16 +129,19 @@ internal class ScreenshotUtility : BitmapCompare {
     /**
      * Load a baseline bitmap from the androidTest assets directory.
      */
-    @Throws(Exception::class)
     fun loadBaselineBitmapForComparison(context: Context, testName: String): Bitmap? {
         val filePath = SOURCE_DIR + DeviceIdentifier.getDescription(context) + "/" + testName + PNG_EXTENSION
         return loadBitmapFromAsset(context, filePath)
     }
 
+    private val createBitmapFromView: Capture
+        get() {
+            return ::createBitmapFromDrawingCache
+        }
+
     /**
      * Capture a bitmap from the given Activity and save it to the screenshots directory.
      */
-    @Throws(Exception::class)
     fun createBitmapFromActivity(activity: Activity, fileName: String, screenshotView: View?): Bitmap? {
         val currentActivityBitmap = arrayOfNulls<Bitmap>(1)
         val latch = CountDownLatch(1)
@@ -176,13 +166,6 @@ internal class ScreenshotUtility : BitmapCompare {
         return BitmapFactory.decodeFile(outputPath, preferredBitmapOptions)
     }
 
-    /**
-     * Compare two bitmaps using [Bitmap.sameAs]
-     */
-    override fun compareBitmaps(baselineBitmap: Bitmap?, currentBitmap: Bitmap?): Boolean {
-        return !(baselineBitmap == null || currentBitmap == null) && baselineBitmap.sameAs(currentBitmap)
-    }
-
     fun deleteBitmap(context: Context, fileName: String): Boolean {
         val file = File(getOutputFilePath(context, fileName))
         return file.delete()
@@ -195,10 +178,10 @@ internal class ScreenshotUtility : BitmapCompare {
     companion object {
 
         private val LOG_TAG = ScreenshotUtility::class.java.simpleName
-        private val PNG_EXTENSION = ".png"
-        private val DATA_DESTINATION_DIR = "images"
-        private val SDCARD_DESTINATION_DIR = "/testify_images"
-        private val SOURCE_DIR = "screenshots/"
+        private const val PNG_EXTENSION = ".png"
+        private const val DATA_DESTINATION_DIR = "images"
+        private const val SDCARD_DESTINATION_DIR = "/testify_images"
+        private const val SOURCE_DIR = "screenshots/"
 
         fun useSdCard(): Boolean {
             val extras = InstrumentationRegistry.getArguments()

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.shopify.testify
+package com.shopify.testify.internal.compare
 
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.annotation.ColorInt
-import androidx.annotation.FloatRange
 import androidx.annotation.VisibleForTesting
 
-internal class FuzzyCompare(@param:FloatRange(from = 0.0, to = 1.0) private val exactness: Float) : BitmapCompare {
+internal class FuzzyCompare(private val exactness: Float) : BitmapCompare {
 
-    override fun compareBitmaps(baselineBitmap: Bitmap?, currentBitmap: Bitmap?): Boolean {
-        if (baselineBitmap == null || currentBitmap == null) {
-            return false
-        }
-
+    override fun compareBitmaps(baselineBitmap: Bitmap, currentBitmap: Bitmap): Boolean {
         if (baselineBitmap.height != currentBitmap.height) {
             return false
         }
@@ -80,10 +75,10 @@ internal class FuzzyCompare(@param:FloatRange(from = 0.0, to = 1.0) private val 
 
     companion object {
 
-        private val HSV_SIZE = 3
-        private val HUE = 0
-        private val SAT = 1
-        private val VAL = 2
+        private const val HSV_SIZE = 3
+        private const val HUE = 0
+        private const val SAT = 1
+        private const val VAL = 2
 
         @VisibleForTesting
         fun isHueDifferent(baseline: Float, current: Float, exactness: Float): Boolean {
@@ -112,5 +107,4 @@ internal class FuzzyCompare(@param:FloatRange(from = 0.0, to = 1.0) private val 
             return Math.toDegrees(Math.acos(dotProduct)).toFloat()
         }
     }
-
 }

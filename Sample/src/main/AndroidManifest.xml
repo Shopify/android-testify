@@ -12,9 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".TestHarnessActivity"></activity>
+        <activity
+            android:name=".clients.details.ClientDetailsActivity"
+            android:parentActivityName=".clients.index.ClientListActivity" />
+        <activity
+            android:name=".clients.index.ClientListActivity"
+            android:label="@string/title_activity_client"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

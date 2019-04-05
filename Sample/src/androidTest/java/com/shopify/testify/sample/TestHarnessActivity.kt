@@ -21,23 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.shopify.testify.sample
 
-package com.shopify.testify
+import android.graphics.Color
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.test.rule.ActivityTestRule
+import com.shopify.testify.ScreenshotRule
 
-import android.content.res.Resources
-import androidx.test.InstrumentationRegistry
+/**
+ * The TestHarnessActivity is used as scaffolding for testing arbitrary views.
+ * Testify's [ScreenshotRule] is a subclass of [ActivityTestRule] which means that an Activity
+ * is required to "host" an UI that you wish to capture in your screenshot.
+ * This empty activity can be used as a generic container for testing your custom [View] classes.
+ */
+class TestHarnessActivity : AppCompatActivity() {
 
-internal object FontScaleHelper {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    fun setTestFontScale(fontScale: Float) {
-        updateResources(InstrumentationRegistry.getTargetContext().resources, fontScale)
-        updateResources(Resources.getSystem(), fontScale)
-    }
-
-    private fun updateResources(resources: Resources, fontScale: Float) {
-        val config = resources.configuration
-        config.fontScale = fontScale
-        @Suppress("DEPRECATION")
-        resources.updateConfiguration(config, resources.displayMetrics)
+        setContentView(FrameLayout(this).apply {
+            layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            setBackgroundColor(Color.WHITE)
+            id = R.id.harness_root
+        })
     }
 }

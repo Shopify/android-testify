@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="harness_root" type="id" />
+    <item name="recycler_view" type="id" />
+</resources>

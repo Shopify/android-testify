@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,5 +24,5 @@
 
 package com.shopify.testify.internal.exception
 
-class ScreenshotDirectoryNotFoundException(useSdCard: Boolean, path: String) : Exception("\n\n* Could not find or create path {" + path + "}.\n" +
-    if (useSdCard) "* Check that your emulator has an SD card image and try again.\n" else "")
+class ScreenshotDirectoryNotFoundException(useSdCard: Boolean, path: String) : Exception("\n\n* Could not find or create path {$path}.\n" +
+        if (useSdCard) "* Check that your emulator has an SD card image and try again.\n" else "")

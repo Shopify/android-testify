@@ -172,3 +172,5 @@ task assembleLocal(description: 'Assembles the outputs of this project for use l
     build.mustRunAfter configureLocal
     copyLocal.mustRunAfter build
 }
+
+apply from: '../ktlint.gradle'

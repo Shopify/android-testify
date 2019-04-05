@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 Shopify Inc.
+ * Copyright (c) 2019 Shopify Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,14 +50,10 @@ internal class StaticPasswordTransformationMethod : TransformationMethod {
             Arrays.fill(chars, DOT)
             return String(chars)
         }
-
     }
 
     companion object {
-
-        //CHECKSTYLE:OFF
-        private val DOT = '\u2022'
-        //CHECKSTYLE:ON
+        private const val DOT = '\u2022'
         private var instance: StaticPasswordTransformationMethod? = null
 
         fun getInstance(): StaticPasswordTransformationMethod? {
