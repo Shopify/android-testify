@@ -40,4 +40,12 @@ class ClientListActivityScreenshotTest {
     fun default() {
         rule.assertSame()
     }
+
+    @ScreenshotInstrumentation
+    @Test
+    fun withFocus() {
+        rule
+            .setClearFocus(clearFocus = false)
+            .assertSame()
+    }
 }

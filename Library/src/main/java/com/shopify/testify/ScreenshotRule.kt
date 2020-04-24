@@ -63,6 +63,7 @@ import com.shopify.testify.internal.exception.ViewModificationException
 import com.shopify.testify.internal.helpers.ResourceWrapper
 import com.shopify.testify.internal.helpers.WrappedFontScale
 import com.shopify.testify.internal.helpers.WrappedLocale
+import com.shopify.testify.internal.modification.FocusModification
 import com.shopify.testify.internal.modification.HideCursorViewModification
 import com.shopify.testify.internal.modification.HidePasswordViewModification
 import com.shopify.testify.internal.modification.HideScrollbarsViewModification
@@ -102,6 +103,7 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(
     private val hideScrollbarsViewModification = HideScrollbarsViewModification()
     private val hideTextSuggestionsViewModification = HideTextSuggestionsViewModification()
     private val softwareRenderViewModification = SoftwareRenderViewModification()
+    private val focusModification = FocusModification()
     private val testContext = getInstrumentation().context
     private var activityMonitor: Instrumentation.ActivityMonitor? = null
     private var assertSameInvoked = false
@@ -164,6 +166,16 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(
 
     fun setUseSoftwareRenderer(useSoftwareRenderer: Boolean): ScreenshotRule<T> {
         this.softwareRenderViewModification.isEnabled = useSoftwareRenderer
+        return this
+    }
+
+    /**
+     * Allows Testify to clear the keyboard focus from the activity under test
+     *
+     * @param clearFocus when true, removes focus from all views in the activity
+     */
+    fun setClearFocus(clearFocus: Boolean): ScreenshotRule<T> {
+        this.focusModification.isEnabled = clearFocus
         return this
     }
 
@@ -460,6 +472,7 @@ open class ScreenshotRule<T : Activity> @JvmOverloads constructor(
             hidePasswordViewModification.modify(parentView)
             softwareRenderViewModification.modify(parentView)
             hideCursorViewModification.modify(parentView)
+            focusModification.modify(activity)
 
             latch.countDown()
         }

@@ -28,6 +28,7 @@ Breaking changes introduced. Bumped Testify to 1.0.0-beta1
 - Correctly detect the locale on API 22
 - `SoftwareRenderViewModification` now qualifies all views, not just `ImageView`
 - setFontScale now works correctly on API 21+
+- Testify will now clear keyboard focus by default
 
 #### Testing changes
 
