@@ -47,4 +47,5 @@ sudo: false
 
 addons:
   artifacts: true
+  paths: Sample/src/androidTest/assets/screenshots
   working_dir: Sample/src/androidTest/assets/screenshots
