@@ -27,6 +27,7 @@ script:
   - ./gradlew Library:test
   - ./gradlew Library:connectedDebugAndroidTest
   - ./gradlew Sample:testifyKey Sample:screenshotTest
+  - ./gradlew Sample:screenshotPull
 
 before_script:
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
@@ -43,3 +44,7 @@ notifications:
   email: false
 
 sudo: false
+
+addons:
+  artifacts: true
+  working_dir: Sample/src/androidTest/assets/screenshots
