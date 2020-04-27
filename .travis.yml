@@ -47,3 +47,4 @@ sudo: false
 
 addons:
   artifacts: true
+  debug: true
