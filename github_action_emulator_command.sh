@@ -35,6 +35,6 @@ then
 	reset_emulator
 
 	./gradlew $GRADLE_COMMAND
+else
+	exit 0
 fi
-
-exit 0
