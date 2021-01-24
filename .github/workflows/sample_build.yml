@@ -15,7 +15,7 @@ jobs:
       run: ./gradlew Sample:assemble
 
     - name: Run Screenshot Tests
-      uses: reactivecircus/android-emulator-runner@v2
+      uses: reactivecircus/android-emulator-runner@v2.14.3
       with:
         api-level: 30
         target: google_apis
