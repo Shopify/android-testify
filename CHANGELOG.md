@@ -1,5 +1,11 @@
 # Testify Change Log
 
+## Unreleased
+
+There are no unreleased changes
+
+---
+
 ## 1.1.0-beta3
 
 ### Library
