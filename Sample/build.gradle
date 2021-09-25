@@ -43,6 +43,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -63,4 +67,5 @@ dependencies {
     androidTestImplementation "androidx.test:runner:${versions.androidx.test.runner}"
     androidTestImplementation "org.mockito:mockito-android:${versions.mockitoAndroid}"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitokotlin}"
+    androidTestImplementation "androidx.test:core-ktx:${versions.androidx.test.coreKtx}"
 }

@@ -24,6 +24,7 @@
 package com.shopify.testify.sample.clients.details
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -60,10 +61,13 @@ class ClientDetailsActivity : AppCompatActivity() {
         private const val EXTRA_CLIENT_ITEM = "client_item"
 
         fun Activity.startClientDetailsActivity(item: MockClientData.Client) {
-            val intent = Intent(this, ClientDetailsActivity::class.java)
-            intent.putExtra(EXTRA_CLIENT_ITEM, item)
-            this.startActivity(intent)
+            startActivity(createClientDetailsActivityIntent(this, item))
         }
 
+        fun createClientDetailsActivityIntent(context: Context, item: MockClientData.Client): Intent {
+            return Intent(context, ClientDetailsActivity::class.java).apply {
+                putExtra(EXTRA_CLIENT_ITEM, item)
+            }
+        }
     }
 }
