@@ -37,7 +37,7 @@ val AnActionEvent.moduleName: String
         val ktFile = (psiFile as? KtFile)
         val projectName = ktFile?.project?.name?.replace(' ', '_') ?: ""
         val moduleName = ktFile?.module?.name ?: ""
-        return moduleName.removePrefix("$projectName.")
+        return moduleName.removeSuffix(".androidTest").removePrefix("$projectName.")
     }
 
 val PsiElement.baselineImageName: String
