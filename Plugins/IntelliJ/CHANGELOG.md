@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.1.3]
+
+### Updated
+
+- Intellij plugin now supports Android Studio Chipmunk | 2021.2.1
+  Build 212.*
+
 ## [0.1.2]
 
 ### Updated
