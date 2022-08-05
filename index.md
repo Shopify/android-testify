@@ -13,7 +13,7 @@ Expand your test coverage by including the View-layer. Testify allows you to eas
 
 Testify screenshot tests are built on top of [Android Instrumentation tests](https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests) and so integrate seamlessly with your existing test suites. You can run tests and capture screenshots from within Android Studio or using the Gradle command-line tools. Testify also works well with most Continuous Integration services. 
 
-You can easily capture screenshots with different resolutions, orientations, API versions and languages by simply configuring different emulators. Testify natively supports grouping screenshot tests by device characteristics. Testify captures a bitmap of your specified View after all layout and draw calls have completed so you know that you're capturing an authentic rendering representative of what your users will see in your final product.
+You can easily capture screenshots with different resolutions, orientations, API versions, and languages by simply configuring different emulators. Testify natively supports grouping screenshot tests by device characteristics. Testify captures a bitmap of your specified View after all layout and draw calls have been completed so you know that you're capturing an authentic rendering representative of what your users will see in your final product.
 
 # Set up Testify
 
@@ -60,7 +60,7 @@ Testify screenshot tests are built on top of Android Instrumentation tests and s
 
 However, the current Android Studio support relies fully on the fact that Testify tests extend ActivityTestRule and can be invoked using the built-in support for running instrumentation tests with various commands (notably sidebar icons) in Android Studio. These are limited to run and debug commands. Android Studio has no concept of recording or pulling screenshots from the device. Thus, it requires developers to drop to the Gradle Panel or command-line to fully use Testify. 
 
-With the installation of an an Intellij-platform plugin, many common Testify actions can be seamlessly integrated into your IDE. The Testify Android Studio plugin is available for Android Studio version 4.0 through 4.2 via the Intellij Marketplace.
+With the installation of an Intellij-platform plugin, many common Testify actions can be seamlessly integrated into your IDE. The Testify Android Studio plugin is available for Android Studio version 4.0 through 4.2 via the Intellij Marketplace.
 
 <a href="https://plugins.jetbrains.com/plugin/14687-android-testify--screenshot-instrumentation-tests"><img width="300px" alt="Get from Marketplace" src="./Plugins/IntelliJ/marketplace/get.png"/></a>
 
