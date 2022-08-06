@@ -1,5 +1,19 @@
 # Testify — Android Screenshot Testing
 
+> **Warning**
+>
+> 🚚 **We have moved!** 🚧
+>
+> Effective August 1, 2022, all development will occur in our new repository: https://github.com/ndtp/android-testify/
+> 
+>
+
+<a href="https://ndtp.github.io/android-testify/docs/migration"><img width="*" src="./7628.png"/></a>
+
+<sub><sup>Move house vector created by pch.vector - [www.freepik.com](https://www.freepik.com/vectors/move-house)</sup></sub>
+
+---
+
 Add screenshots to your Android tests
 
 <a href="https://github.com/Shopify/android-testify/actions?query=workflow%3A%22Build+Gradle+Plugin%22"><img alt="GitHub Actions" src="https://github.com/Shopify/android-testify/workflows/Build%20Gradle%20Plugin/badge.svg?branch=main"/></a> <a href="https://search.maven.org/artifact/com.shopify.testify/testify"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.shopify.testify/testify?color=%236e40ed&label=com.shopify.testify%3Atestify"/></a> <a href="https://search.maven.org/artifact/com.shopify.testify/plugin"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.shopify.testify/plugin?color=%234da1ea&label=com.shopify.testify%3Aplugin"/></a>

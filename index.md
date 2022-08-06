@@ -2,6 +2,17 @@
 layout: index
 ---
 
+
+## 🚚 **We have moved!** 🚧
+
+**Effective August 1, 2022, all development will occur in our new repository: [https://github.com/ndtp/android-testify/](https://github.com/ndtp/android-testify/)**
+
+<a href="https://ndtp.github.io/android-testify/docs/migration"><img width="*" src="./7628.png"/></a>
+
+<sub><sup>Move house vector created by pch.vector - [www.freepik.com](https://www.freepik.com/vectors/move-house)</sup></sub>
+
+---
+
 # Testify — Android Screenshot Testing
 
 Add screenshots to your Android tests
